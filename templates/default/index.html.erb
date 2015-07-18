@@ -1,0 +1,17 @@
+<html>
+  <body>
+    <table border="1" style="width:50%">
+      <tr>
+        <th>Machine Name</th>
+        <th>Public IP Address</th>
+      </tr>
+      <% @classnum = 0 -%>
+      <% @workstations.each do |workstation| -%>
+      <tr>
+        <td><%= "Workstation-#{@classnum += 1}" %></td>
+        <td><%= workstation['ec2']['public_ipv4'] %></td>
+      <%end -%>
+      </tr>
+    </table>
+  </body>
+</html>
