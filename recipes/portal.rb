@@ -36,5 +36,5 @@ end
 template '/var/www/html/index.html' do
 	source 'index.html.erb'
 	mode '0644'
-	variables :workstations => search("node","recipes:chef_workstation\:\:* AND tags:#{node['chef_classroom']['class_name']}")
+	variables :workstations => search("node","recipe:*chef_workstation*")
 end
