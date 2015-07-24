@@ -49,7 +49,7 @@ machine_batch do
   1.upto(count) do |i|
     machine "#{name}-workstation#{i}" do
   	  machine_options :bootstrap_options =>{
-        :security_group_ids => "chef-#{name}-workstation-sg"
+        :security_group_ids => "training-#{name}-workstation-sg"
       }
   	  recipe 'chef_workstation::full_stack'
 	  end
@@ -58,7 +58,7 @@ end
 
 machine "#{name}-portal" do
   machine_options :bootstrap_options =>{
-      :security_group_ids => "chef-#{name}-portal-sg"
+      :security_group_ids => "training-#{name}-portal-sg"
       }
   recipe 'chef_classroom::portal'
 end
