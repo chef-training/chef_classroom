@@ -18,8 +18,5 @@ bin/*
 # Chef Zero
 nodes/
 clients/
-cookbooks/chef-dk/
-cookbooks/chef_workstation/
-cookbooks/dmg/
-cookbooks/sudo/
-cookbooks/yum/
+cookbooks/
+local-mode-cache/

@@ -1,5 +1,12 @@
-log_level        :info
-log_location     STDOUT
+log_level                :info
+log_location             STDOUT
+node_name                "mynode"
+cache_type               'BasicFile'
+cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
+#
+knife[:aws_access_key_id] = "AKIABOGUSACCESSKEY"
+knife[:aws_secret_access_key] = "Abc0123dEf4GhIjk5lMn/OpQrSTUvXyz/A678bCD"
+knife[:aws_ssh_key_id] = "aws_popup_chef"
 profiles({
   'default' => {
     :driver => 'aws',
