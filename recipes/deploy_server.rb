@@ -47,3 +47,7 @@ machine "#{name}-chefserver" do
   }
   tag 'chefserver'
 end
+
+machine "#{name}-portal" do
+  converge true
+end
