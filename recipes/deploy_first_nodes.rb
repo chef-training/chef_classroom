@@ -53,6 +53,5 @@ machine_batch do
 end
 
 machine "#{name}-portal" do
-  recipe 'chef_classroom::portal'
   converge true
 end
