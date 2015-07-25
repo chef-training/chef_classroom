@@ -28,7 +28,7 @@ Except with your own AWS API credentials here
 
 5) Run `chef-client -z -r 'recipe[chef_classroom]'` (or see the demo steps below)
 
-You should now have a classroom set up.
+You should now have a classroom set up.  Note: at present the Chef Server setup takes ~15 mins and consumes a large majority of the classroom setup time.
 
 To find the portal node, at this time the best way is to run the command `grep public_ipv4 nodes/mytraining-portal.json`.  There's a gem conflict preventing knife from working in local-mode that should be resolved the next time ChefDK ships.
 
@@ -56,7 +56,8 @@ To achieve the desired instructor experience, follow these steps to see a demo c
 
 4) At some appropriate point, students need a Chef Server
 
-* TO-DO item
+* `chef-client -z -r 'recipe[chef_classroom::deploy_server]'`
+* Check the portal page
 
 5) At some appropriate point, students will need multiple target nodes (without chef installed) to configure
 
@@ -74,32 +75,8 @@ The idea is to solidify this cookbook to manage all the steps required for a Che
 
 The setup steps above are minimal and we should be able to put some polish around them in order to make them consumable in a more "easy to use" manner.
 
-### TO-DO Items
+See [issues](https://github.com/gmiranda23/chef_classroom/issues) for other pending items.
 
-* This cookbook currently relies on the `chef_workstation` cookbook to build workstations.  We should be using baked AMIs that pop out of a delivery pipeline instead of building these workstations every time.
-* We should be launching a Chef Server via the AWS Marketplace AMI
-* Right now the portal only displays instance IDs as a POC for how the portal works.  We need to muck with the `aws_object` method to pull out IPs for machines that haven't ever run chef-client and stuff those somewhere useful.  The approach will be some sort of method similar to this:
-
-```
-machine_image 'my_image' do
-      ...
-end
-
-ruby_block "look up machine_image object" do
-  block do
-    aws_object = Chef::Resource::AwsImage.get_aws_object(
-      'my_image',
-      run_context: run_context,
-      driver: run_context.chef_provisioning.current_driver,
-      managed_entry_store: Chef::Provisioning.chef_managed_entry_store(run_context.cheffish.current_chef_server)
-    )
-  end
-end
-```
-
-* We need to refactor the guacamole cookbook to allow easy workstation access.  We should then pull a recipe for that setup onto the portal node.
-* We need to change up search to display the rest of the nodes we create
-* Someone with front-end webdev skills should make a decent looking portal page
 
 ## Development
 Usage note: if you make changes to the `chef_classroom` cookbook, you must `berks vendor cookbooks` again before running `chef-client -z` for those changes to get picked up while testing.
