@@ -14,9 +14,11 @@ To set up a Chef Training Classroom, do the following:
 
 1. Create your `~/.aws/config` file if you don't already have one.  It should have content similar to the snippet below, except with your own AWS API credentials here:
 
-       [default]
-       aws_access_key_id = AKIAAABBCCDDEEFFGGHH
-       aws_secret_access_key = "Abc0123dEf4GhIjk5lMn/OpQrSTUvXyz/A678bCD"
+    ```
+    [default]
+    aws_access_key_id = AKIAAABBCCDDEEFFGGHH
+    aws_secret_access_key = "Abc0123dEf4GhIjk5lMn/OpQrSTUvXyz/A678bCD"
+    ```
 
 2. Set your AWS localization options in the `knife.rb` file.  Specifically, you must enter a valid `key_name` in the `:bootstrap_options` section.  You should not need to change any other fields unless you wish to try this in another AWS region.
 
