@@ -28,4 +28,5 @@
 
 include_recipe 'chef_classroom::destroy_workstations'
 include_recipe 'chef_classroom::destroy_nodes'
+include_recipe 'chef_classroom::destroy_server'
 include_recipe 'chef_classroom::destroy_portal'

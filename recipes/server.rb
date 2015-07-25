@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: default
+# Recipe:: server
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -26,7 +26,20 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include_recipe 'chef_classroom::deploy_workstations'
-include_recipe 'chef_classroom::deploy_first_nodes'
-include_recipe 'chef_classroom::deploy_server'
-include_recipe 'chef_classroom::deploy_multi_nodes'
+execute "chef-server-ctl install opscode-manage"
+
+%w(opscode-manage opscode).each do |dir|
+  directory dir
+end
+
+template "/etc/opscode-manage/manage.rb" do
+  source "manage.rb.erb"
+end
+
+template "/etc/opscode/chef-server.rb" do
+  source "chef-server.rb.erb"
+end
+
+execute "chef-server-ctl reconfigure"
+
+execute "opscode-manage-ctl reconfigure"

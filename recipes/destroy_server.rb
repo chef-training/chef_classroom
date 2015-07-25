@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: default
+# Recipe:: destroy_server
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -26,7 +26,19 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include_recipe 'chef_classroom::deploy_workstations'
-include_recipe 'chef_classroom::deploy_first_nodes'
-include_recipe 'chef_classroom::deploy_server'
-include_recipe 'chef_classroom::deploy_multi_nodes'
+name = node['chef_classroom']['class_name']
+
+require 'chef/provisioning/aws_driver'
+
+with_chef_server  Chef::Config[:chef_server_url],
+  :client_name => Chef::Config[:node_name],
+  :signing_key_filename => Chef::Config[:client_key]
+
+
+machine "#{name}-chefserver" do
+  action :destroy
+end
+
+aws_security_group "training-#{name}-chefserver-sg" do
+  action :destroy
+end

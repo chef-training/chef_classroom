@@ -40,6 +40,7 @@ template '/var/www/html/index.html' do
     :workstations => search("node","tags:workstation"),
 	  :node1s => search("node","tags:node1"),
 	  :node2s => search("node","tags:node2"),
-	  :node3s => search("node","tags:node3")
+	  :node3s => search("node","tags:node3"),
+	  :chefserver => search("node","tags:chefserver")
   })
 end
