@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: portal
+# Recipe:: destroy_portal
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -26,20 +26,18 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package 'httpd'
+require 'chef/provisioning/aws_driver'
 
-service 'httpd' do
-	supports :status => true, :restart => true, :reload => true
-	action [ :start, :enable ]
+name = node['chef_classroom']['class_name']
+
+with_chef_server  Chef::Config[:chef_server_url],
+  :client_name => Chef::Config[:node_name],
+  :signing_key_filename => Chef::Config[:client_key]
+
+machine "#{name}-portal" do
+  action :destroy
 end
 
-template '/var/www/html/index.html' do
-	source 'index.html.erb'
-	mode '0644'
-	variables({
-    :workstations => search("node","tags:workstation"),
-	  :node1s => search("node","tags:node1"),
-	  :node2s => search("node","tags:node2"),
-	  :node3s => search("node","tags:node3")
-  })
+aws_security_group "training-#{name}-portal-sg" do
+  action :destroy
 end

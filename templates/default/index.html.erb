@@ -1,17 +1,77 @@
 <html>
   <body>
+
+<p>
+
+<% unless @workstations == Array.new -%>
     <table border="1" style="width:50%">
       <tr>
-        <th>Machine Name</th>
+        <th>Workstation Name</th>
         <th>Public IP Address</th>
       </tr>
-      <% @classnum = 0 -%>
+      <% @w_count = 0 -%>
       <% @workstations.each do |workstation| -%>
       <tr>
-        <td><%= "Workstation-#{@classnum += 1}" %></td>
+        <td><%= "Workstation-#{@w_count += 1}" %></td>
         <td><%= workstation['ec2']['public_ipv4'] %></td>
       <%end -%>
       </tr>
     </table>
+<% end -%>
+
+<p>
+
+<% unless @node1s == Array.new -%>
+    <table border="1" style="width:50%">
+      <tr>
+        <th>Node1 Name</th>
+        <th>Public IP Address</th>
+      </tr>
+      <% @n1_count = 0 -%>
+      <% @node1s.each do |node1| -%>
+      <tr>
+        <td><%= "Node1-#{@n1_count += 1}" %></td>
+        <td><%= node1['chef_provisioning']['reference']['image_id'] %></td>
+      <%end -%>
+      </tr>
+    </table>
+<% end -%>
+
+<p>
+
+<% unless @node2s == Array.new -%>
+    <table border="1" style="width:50%">
+      <tr>
+        <th>Node2 Name</th>
+        <th>Public IP Address</th>
+      </tr>
+      <% @n2_count = 0 -%>
+      <% @node2s.each do |node2| -%>
+      <tr>
+        <td><%= "Node2-#{@n2_count += 1}" %></td>
+        <td><%= node2['chef_provisioning']['reference']['image_id'] %></td>
+      <%end -%>
+      </tr>
+    </table>
+<% end -%>
+
+<p>
+
+<% unless @node3s == Array.new -%>
+    <table border="1" style="width:50%">
+      <tr>
+        <th>Node3 Name</th>
+        <th>Public IP Address</th>
+      </tr>
+      <% @n3_count = 0 -%>
+      <% @node3s.each do |node3| -%>
+      <tr>
+        <td><%= "Node3-#{@n3_count += 1}" %></td>
+        <td><%= node3['chef_provisioning']['reference']['image_id'] %></td>
+      <%end -%>
+      </tr>
+    </table>
+<% end -%>
+
   </body>
 </html>

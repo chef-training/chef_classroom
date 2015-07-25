@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: portal
+# Recipe:: deploy_workstations
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -26,20 +26,40 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package 'httpd'
+count = node['chef_classroom']['workstation_count']
+name = node['chef_classroom']['class_name']
 
-service 'httpd' do
-	supports :status => true, :restart => true, :reload => true
-	action [ :start, :enable ]
+require 'chef/provisioning/aws_driver'
+
+with_chef_server  Chef::Config[:chef_server_url],
+  :client_name => Chef::Config[:node_name],
+  :signing_key_filename => Chef::Config[:client_key]
+
+aws_security_group "training-#{name}-workstation-sg" do
+	action :create
+    inbound_rules '0.0.0.0/0' => [ 22, 80 ]
 end
 
-template '/var/www/html/index.html' do
-	source 'index.html.erb'
-	mode '0644'
-	variables({
-    :workstations => search("node","tags:workstation"),
-	  :node1s => search("node","tags:node1"),
-	  :node2s => search("node","tags:node2"),
-	  :node3s => search("node","tags:node3")
-  })
+aws_security_group "training-#{name}-portal-sg" do
+	action :create
+    inbound_rules '0.0.0.0/0' => [ 22, 80 ]
+end
+
+machine_batch do
+  1.upto(count) do |i|
+    machine "#{name}-workstation#{i}" do
+  	  machine_options :bootstrap_options =>{
+        :security_group_ids => "training-#{name}-workstation-sg"
+      }
+  	  recipe 'chef_workstation::full_stack'
+      tag 'workstation'
+	  end
+  end
+end
+
+machine "#{name}-portal" do
+  machine_options :bootstrap_options =>{
+      :security_group_ids => "training-#{name}-portal-sg"
+      }
+  recipe 'chef_classroom::portal'
 end

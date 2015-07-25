@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: portal
+# Recipe:: destroy_nodes
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -26,20 +26,24 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package 'httpd'
+name = node['chef_classroom']['class_name']
+node1_count = node['chef_classroom']['node1_count']
+node2_count = node['chef_classroom']['node2_count']
+node3_count = node['chef_classroom']['node3_count']
 
-service 'httpd' do
-	supports :status => true, :restart => true, :reload => true
-	action [ :start, :enable ]
+require 'chef/provisioning/aws_driver'
+
+with_chef_server  Chef::Config[:chef_server_url],
+  :client_name => Chef::Config[:node_name],
+  :signing_key_filename => Chef::Config[:client_key]
+
+machine_batch do
+  action :destroy
+  machines 1.upto(node1_count).map { |i| "#{name}-node1#{i}" }
+  machines 1.upto(node2_count).map { |i| "#{name}-node2#{i}" }
+  machines 1.upto(node3_count).map { |i| "#{name}-node3#{i}" }
 end
 
-template '/var/www/html/index.html' do
-	source 'index.html.erb'
-	mode '0644'
-	variables({
-    :workstations => search("node","tags:workstation"),
-	  :node1s => search("node","tags:node1"),
-	  :node2s => search("node","tags:node2"),
-	  :node3s => search("node","tags:node3")
-  })
+aws_security_group "training-#{name}-node-sg" do
+  action :destroy
 end
