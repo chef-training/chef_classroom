@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: default
+# Recipe:: deploy_server
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -26,7 +26,24 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include_recipe 'chef_classroom::deploy_workstations'
-include_recipe 'chef_classroom::deploy_first_nodes'
-include_recipe 'chef_classroom::deploy_server'
-include_recipe 'chef_classroom::deploy_multi_nodes'
+name = node['chef_classroom']['class_name']
+
+require 'chef/provisioning/aws_driver'
+
+with_chef_server  Chef::Config[:chef_server_url],
+  :client_name => Chef::Config[:node_name],
+  :signing_key_filename => Chef::Config[:client_key]
+
+aws_security_group "training-#{name}-chefserver-sg" do
+	action :create
+    inbound_rules '0.0.0.0/0' => [ 22, 443 ]
+end
+
+machine "#{name}-chefserver" do
+  recipe 'chef_classroom::server'
+  machine_options :bootstrap_options => {
+    :security_group_ids => "training-#{name}-chefserver-sg",
+    :image_id => 'ami-0d2ce366'
+  }
+  tag 'chefserver'
+end

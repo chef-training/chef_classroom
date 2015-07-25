@@ -17,7 +17,7 @@ profiles({
       :bootstrap_options => {
         :instance_type => 'm3.medium',
         :image_id => 'ami-1ecae776',
-        :key_name => 'aws-id_rsa'
+        :key_name => 'aws-popup-chef'
       }
     }
   }

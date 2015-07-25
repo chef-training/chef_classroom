@@ -73,5 +73,20 @@
     </table>
 <% end -%>
 
+<% unless @chefserver == Array.new -%>
+    <table border="1" style="width:50%">
+      <tr>
+        <th>Chef Server Name</th>
+        <th>Public IP Address</th>
+      </tr>
+      <% @chefserver.each do |server| -%>
+      <tr>
+        <td><%= "Chef Server" %></td>
+        <td><%= server['ec2']['public_ipv4'] %></td>
+      <%end -%>
+      </tr>
+    </table>
+<% end -%>
+
   </body>
 </html>
