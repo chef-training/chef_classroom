@@ -50,6 +50,8 @@ machine_batch do
       }
       tag 'node2'
 	  end
+  end
+  1.upto(node3_count) do |i|
     machine "#{name}-node3#{i}" do
   	  machine_options :bootstrap_options =>{
         :security_group_ids => "training-#{name}-node-sg"
