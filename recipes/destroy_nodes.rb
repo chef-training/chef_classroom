@@ -44,6 +44,10 @@ machine_batch do
   machines 1.upto(node3_count).map { |i| "#{name}-node3#{i}" }
 end
 
+chef_data_bag "class_machines" do
+  action :delete
+end
+
 aws_security_group "training-#{name}-node-sg" do
   action :destroy
 end

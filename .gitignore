@@ -19,4 +19,5 @@ bin/*
 nodes/
 clients/
 cookbooks/
+data_bags/
 local-mode-cache/
