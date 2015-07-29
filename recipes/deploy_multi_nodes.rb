@@ -38,7 +38,7 @@ with_chef_server  Chef::Config[:chef_server_url],
 
 aws_security_group "training-#{name}-node-sg" do
 	action :create
-    inbound_rules '0.0.0.0/0' => [ 22, 80 ]
+    inbound_rules '0.0.0.0/0' => [ 22, 80, 3389, 5985, 5986 ]
 end
 
 machine_batch do
@@ -56,7 +56,7 @@ machine_batch do
   	  machine_options :bootstrap_options =>{
         :image_id => "ami-f70cdd9c",
         :security_group_ids => "training-#{name}-node-sg"
-      }
+      }, :is_windows => true
       tag 'node3'
 	  end
   end
