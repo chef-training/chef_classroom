@@ -35,6 +35,9 @@ with_chef_server  Chef::Config[:chef_server_url],
   :client_name => Chef::Config[:node_name],
   :signing_key_filename => Chef::Config[:client_key]
 
+# we will need this data_bag later
+chef_data_bag "class_machines"
+
 aws_security_group "training-#{name}-workstation-sg" do
 	action :create
     inbound_rules '0.0.0.0/0' => [ 22, 80 ]

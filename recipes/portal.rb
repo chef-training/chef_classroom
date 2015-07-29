@@ -38,9 +38,9 @@ template '/var/www/html/index.html' do
 	mode '0644'
 	variables({
     :workstations => search("node","tags:workstation"),
-	  :node1s => search("node","tags:node1"),
-	  :node2s => search("node","tags:node2"),
-	  :node3s => search("node","tags:node3"),
+	  :node1s => search("class_machines","tags:node1"),
+	  :node2s => search("class_machines","tags:node2"),
+	  :node3s => search("class_machines","tags:node3"),
 	  :chefserver => search("node","tags:chefserver")
   })
 end

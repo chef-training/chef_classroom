@@ -52,6 +52,30 @@ machine_batch do
   end
 end
 
+# track what chef provisioning creates
+# hackity hack, don't talk back
+chef_data_bag "class_machines"
+
+1.upto(node1_count) do |i|
+  ruby_block "look up node1#{i} machine object" do
+    retries 6
+    retry_delay 10
+    block do
+      aws_object = Chef::Resource::AwsInstance.get_aws_object(
+        "#{name}-node1#{i}",
+        run_context: run_context,
+        driver: run_context.chef_provisioning.current_driver,
+        managed_entry_store: Chef::Provisioning.chef_managed_entry_store(run_context.cheffish.current_chef_server)
+      )
+      new_item = Chef::DataBagItem.from_hash({ 'id' => "#{name}-node1#{i}", 'public_ip' => "#{aws_object.public_ip_address}", 'tags' => 'node1'})
+      new_item.data_bag('class_machines')
+      new_item.save
+      exit(1) if aws_object.public_ip_address.to_s.empty?
+    end
+  end
+end
+#
+
 machine "#{name}-portal" do
   converge true
 end

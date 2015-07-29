@@ -31,7 +31,7 @@
       <% @node1s.each do |node1| -%>
       <tr>
         <td><%= "Node1-#{@n1_count += 1}" %></td>
-        <td><%= node1['chef_provisioning']['reference']['image_id'] %></td>
+        <td><%= node1['public_ip'] %></td>
       <%end -%>
       </tr>
     </table>
@@ -49,7 +49,7 @@
       <% @node2s.each do |node2| -%>
       <tr>
         <td><%= "Node2-#{@n2_count += 1}" %></td>
-        <td><%= node2['chef_provisioning']['reference']['image_id'] %></td>
+        <td><%= node2['public_ip'] %></td>
       <%end -%>
       </tr>
     </table>
@@ -67,11 +67,13 @@
       <% @node3s.each do |node3| -%>
       <tr>
         <td><%= "Node3-#{@n3_count += 1}" %></td>
-        <td><%= node3['chef_provisioning']['reference']['image_id'] %></td>
+        <td><%= node3['public_ip'] %></td>
       <%end -%>
       </tr>
     </table>
 <% end -%>
+
+<p>
 
 <% unless @chefserver == Array.new -%>
     <table border="1" style="width:50%">
