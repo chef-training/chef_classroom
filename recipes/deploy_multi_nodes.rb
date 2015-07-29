@@ -54,6 +54,7 @@ machine_batch do
   1.upto(node3_count) do |i|
     machine "#{name}-node3#{i}" do
   	  machine_options :bootstrap_options =>{
+        :image_id => "ami-f70cdd9c",
         :security_group_ids => "training-#{name}-node-sg"
       }
       tag 'node3'
