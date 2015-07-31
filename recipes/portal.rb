@@ -26,6 +26,10 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+service "iptables" do
+  action [ :disable, :stop ]
+end
+
 package 'httpd'
 
 service 'httpd' do
@@ -44,3 +48,25 @@ template '/var/www/html/index.html' do
 	  :chefserver => search("node","tags:chefserver")
   })
 end
+
+# create the guacamole user map
+count = node['chef_classroom']['workstation_count']
+name = node['chef_classroom']['class_name']
+
+usermap = Hash.new
+1.upto(count).each do |i|
+  usermap["#{i}"] = {
+    "name" => "student#{i}",
+    "password" => "chef",
+    "machines" => {
+      "workstation" => search("node","tags:workstation AND name:#{name}-workstation#{i}").first,
+      "node1" => search("class_machines","tags:node1 AND name:#{name}-node1#{i}").first,
+      "node2" => search("class_machines","tags:node2 AND name:#{name}-node2#{i}").first,
+      "node3" => search("class_machines","tags:node2 AND name:#{name}-node3#{i}").first
+    }
+  }
+end
+
+#node.default['guacamole']['usermap'] = usermap
+
+include_recipe 'guacamole'

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: deploy_workstations
+# Recipe:: deploy_portal
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -27,7 +27,6 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 name = node['chef_classroom']['class_name']
-workstation_count = node['chef_classroom']['workstation_count']
 
 require 'chef/provisioning/aws_driver'
 
@@ -35,15 +34,19 @@ with_chef_server  Chef::Config[:chef_server_url],
   :client_name => Chef::Config[:node_name],
   :signing_key_filename => Chef::Config[:client_key]
 
-machine_batch do
-  action :destroy
-  machines 1.upto(workstation_count).map { |i| "#{name}-workstation#{i}" }
-end
+# we will need this data_bag later
+chef_data_bag "class_machines"
 
-aws_security_group "training-#{name}-workstation-sg" do
-  action :destroy
+aws_security_group "training-#{name}-portal-sg" do
+	action :create
+    inbound_rules '0.0.0.0/0' => [ 22, 80, 8080 ]
 end
 
 machine "#{name}-portal" do
-    converge true
+  machine_options :bootstrap_options =>{
+      :image_id => "ami-c2a818aa",
+      :security_group_ids => "training-#{name}-portal-sg"
+      }, :ssh_username => 'root'
+  recipe 'chef_classroom::portal'
+  converge true
 end
