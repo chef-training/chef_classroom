@@ -71,13 +71,26 @@ chef_data_bag "class_machines"
     retries 6
     retry_delay 10
     block do
+      object_name = "#{name}-node2#{i}"
       aws_object = Chef::Resource::AwsInstance.get_aws_object(
-        "#{name}-node2#{i}",
+        object_name,
         run_context: run_context,
         driver: run_context.chef_provisioning.current_driver,
         managed_entry_store: Chef::Provisioning.chef_managed_entry_store(run_context.cheffish.current_chef_server)
       )
-      new_item = Chef::DataBagItem.from_hash({ 'id' => "#{name}-node2#{i}", 'public_ip' => "#{aws_object.public_ip_address}", 'tags' => 'node2'})
+      new_item = Chef::DataBagItem.from_hash({
+        'id' => object_name,
+        'name' => object_name,
+        'ec2' => {
+          'public_hostname' => "#{aws_object.public_dns_name}",
+          'public_ipv4' => "#{aws_object.public_ip_address}",
+          'private_ipv4' => "#{aws_object.private_ip_address}"
+          },
+          'platform_family' => 'rhel',
+          'guacamole_user' => 'chef',
+          'guacamole_pass' => 'chef',
+          'tags' => 'node2'
+      })
       new_item.data_bag('class_machines')
       new_item.save
       exit(1) if aws_object.public_ip_address.to_s.empty?
@@ -85,17 +98,30 @@ chef_data_bag "class_machines"
   end
 end
 1.upto(node3_count) do |i|
-  ruby_block "look up machine node2#{i} object" do
+  ruby_block "look up machine node3#{i} object" do
     retries 6
     retry_delay 10
     block do
+      object_name = "#{name}-node3#{i}"
       aws_object = Chef::Resource::AwsInstance.get_aws_object(
-        "#{name}-node3#{i}",
+        object_name,
         run_context: run_context,
         driver: run_context.chef_provisioning.current_driver,
         managed_entry_store: Chef::Provisioning.chef_managed_entry_store(run_context.cheffish.current_chef_server)
       )
-      new_item = Chef::DataBagItem.from_hash({ 'id' => "#{name}-node3#{i}", 'public_ip' => "#{aws_object.public_ip_address}", 'tags' => 'node3'})
+      new_item = Chef::DataBagItem.from_hash({
+        'id' => object_name,
+        'name' => object_name,
+        'ec2' => {
+          'public_hostname' => "#{aws_object.public_dns_name}",
+          'public_ipv4' => "#{aws_object.public_ip_address}",
+          'private_ipv4' => "#{aws_object.private_ip_address}"
+          },
+          'platform_family' => 'windows',
+          'guacamole_user' => 'chef',
+          'guacamole_pass' => 'chef',
+          'tags' => 'node3'
+      })
       new_item.data_bag('class_machines')
       new_item.save
       exit(1) if aws_object.public_ip_address.to_s.empty?

@@ -26,12 +26,14 @@
       <tr>
         <th>Node1 Name</th>
         <th>Public IP Address</th>
+        <th>Platform Family</th>
       </tr>
       <% @n1_count = 0 -%>
       <% @node1s.each do |node1| -%>
       <tr>
         <td><%= "Node1-#{@n1_count += 1}" %></td>
-        <td><%= node1['public_ip'] %></td>
+        <td><%= node1['ec2']['public_ipv4'] %></td>
+        <td><%= node1['platform_family'] %></td>
       <%end -%>
       </tr>
     </table>
@@ -44,12 +46,14 @@
       <tr>
         <th>Node2 Name</th>
         <th>Public IP Address</th>
+        <th>Platform Family</th>
       </tr>
       <% @n2_count = 0 -%>
       <% @node2s.each do |node2| -%>
       <tr>
         <td><%= "Node2-#{@n2_count += 1}" %></td>
-        <td><%= node2['public_ip'] %></td>
+        <td><%= node2['ec2']['public_ipv4'] %></td>
+        <td><%= node2['platform_family'] %></td>
       <%end -%>
       </tr>
     </table>
@@ -62,12 +66,14 @@
       <tr>
         <th>Node3 Name</th>
         <th>Public IP Address</th>
+        <th>Platform Family</th>
       </tr>
       <% @n3_count = 0 -%>
       <% @node3s.each do |node3| -%>
       <tr>
         <td><%= "Node3-#{@n3_count += 1}" %></td>
-        <td><%= node3['public_ip'] %></td>
+        <td><%= node3['ec2']['public_ipv4'] %></td>
+        <td><%= node3['platform_family'] %></td>
       <%end -%>
       </tr>
     </table>

@@ -7,3 +7,4 @@ long_description 'Installs/Configures chef_classroom'
 version '0.1.0'
 
 depends 'chef_workstation'
+depends 'guacamole'

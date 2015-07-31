@@ -43,11 +43,6 @@ aws_security_group "training-#{name}-workstation-sg" do
     inbound_rules '0.0.0.0/0' => [ 22, 80 ]
 end
 
-aws_security_group "training-#{name}-portal-sg" do
-	action :create
-    inbound_rules '0.0.0.0/0' => [ 22, 80 ]
-end
-
 machine_batch do
   1.upto(count) do |i|
     machine "#{name}-workstation#{i}" do
@@ -56,13 +51,10 @@ machine_batch do
       }
   	  recipe 'chef_workstation::full_stack'
       tag 'workstation'
+      attribute 'guacamole_user', 'chef'
+      attribute 'guacamole_pass', 'chef'
 	  end
   end
 end
 
-machine "#{name}-portal" do
-  machine_options :bootstrap_options =>{
-      :security_group_ids => "training-#{name}-portal-sg"
-      }
-  recipe 'chef_classroom::portal'
-end
+include_recipe "chef_classroom::deploy_portal"
