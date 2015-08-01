@@ -27,14 +27,11 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 require 'chef/provisioning/aws_driver'
+with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
 machine "#{name}-chefserver" do
-  machine_options :bootstrap_options => {
-                    :security_group_ids => "training-#{name}-chef_server",
-                    :instance_type => server_size,
-                    :image_id => 'ami-0d2ce366'
-                  }
+  machine_options create_machine_options(region, 'marketplace', server_size, ssh_key, 'chef_server')
   tag 'chefserver'
   recipe 'chef_classroom::server'
 end

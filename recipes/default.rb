@@ -32,3 +32,9 @@ include_recipe 'chef_classroom::deploy_workstations'
 include_recipe 'chef_classroom::deploy_first_nodes'
 include_recipe 'chef_classroom::deploy_server'
 include_recipe 'chef_classroom::deploy_multi_nodes'
+
+name = node['chef_classroom']['class_name']
+machine "#{name}-portal" do
+  machine_options :ssh_username => 'root'
+  converge true
+end

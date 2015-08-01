@@ -18,6 +18,7 @@ bin/*
 # Chef Zero
 nodes/
 clients/
+keys/
 cookbooks/
 data_bags/
 local-mode-cache/
