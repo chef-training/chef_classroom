@@ -27,16 +27,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 require 'chef/provisioning/aws_driver'
+with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
 machine_batch do
   action :allocate
   1.upto(count) do |i|
     machine "#{name}-node1-#{i}" do
-  	  machine_options :bootstrap_options => {
-                        :instance_type => node_size,
-                        :security_group_ids => "training-#{name}-nodes"
-                      }
+      machine_options create_machine_options(region, 'amzn', node_size, ssh_key, 'nodes')
       tag 'node1'
 	  end
   end

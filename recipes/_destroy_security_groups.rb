@@ -27,6 +27,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 require 'chef/provisioning/aws_driver'
+with_driver "aws::#{region}"
+
 name = node['chef_classroom']['class_name']
 
 %w(chef_server nodes workstations portal).each do |secgroup|

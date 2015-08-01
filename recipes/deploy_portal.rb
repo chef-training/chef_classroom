@@ -27,16 +27,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 require 'chef/provisioning/aws_driver'
+with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
-# we will need this data_bag later
+# the portal will need this data_bag later
 chef_data_bag "class_machines"
 
 machine "#{name}-portal" do
-  machine_options :bootstrap_options => {
-                    :image_id => "ami-c2a818aa",
-                    :security_group_ids => "training-#{name}-portal"
-                  }, :ssh_username => 'root'
+  machine_options create_machine_options(region, 'centos', portal_size, ssh_key, 'portal')
   recipe 'chef_classroom::portal'
   converge true
 end

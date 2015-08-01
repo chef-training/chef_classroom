@@ -10,6 +10,8 @@ In order to use this repo, you must have the following setup:
 
 ## Usage
 
+Note: this repo uses AWS Marketplace AMIs for Centos6, Windows 2012, and Chef Server.  **You must accept the licensing terms** from your AWS account for each of those AMIs, in each region for which you want to deploy a classroom, before this repo will work.  If you have not, chef-provisioning-aws will throw an error letting you know you must go do this.
+
 To set up a Chef Training Classroom, do the following:
 
 1. Create your `~/.aws/config` file if you don't already have one.  It should have content similar to the snippet below, except with your own AWS API credentials here:
@@ -20,22 +22,25 @@ To set up a Chef Training Classroom, do the following:
     aws_secret_access_key = "Abc0123dEf4GhIjk5lMn/OpQrSTUvXyz/A678bCD"
     ```
 
-2. Set your AWS localization options in the `knife.rb` file.  Specifically, you must enter a valid `key_name` in the `:bootstrap_options` section.  You should not need to change any other fields unless you wish to try this in another AWS region.
+2. At a minimum, ensure the correct value for `chef_classroom['ssh_key_name']` is set in `attributes/default.rb`.
 
-3. Ensure the private key associated with the ssh key you just specified is located in your `~/.ssh` directory.  For example, if using the default value in this repo's `knife.rb` you would need the correspoding private key in `~/.ssh/aws-id_rsa`.
+3. Ensure the private key associated with the ssh key you just specified is located in your `~/.ssh` directory.  For example, if using the default value in this repo's attributes file `"aws-id_rsa"` you would need the corresponding private key in `~/.ssh/aws-id_rsa`.
 
-4. Run `berks vendor cookbooks`
+4. Additional options may be set, including automatic localization via the `chef_classroom['region']` attribute (note: so far only AWS US regions available).  Ensure that your `ssh_key_name` is valid for any region you set.  It is recommended that instructors replace the value of `chef_classroom['ip_range']` with an appropriate IP address range (e.g. "184.106.28.82/24") for any classroom being managed.  The permissions and security settings of these instances are... lax.  However, none of these changes are required for basic (demo) use of this repo.
 
-5. Run `chef-client -z -r 'recipe[chef_classroom]'` (or see the demo steps below)
+5. Run `berks vendor cookbooks`
 
-You should now have a classroom set up.  *Note: at present the Chef Server setup takes ~15 mins and consumes a large majority of the classroom setup time (~20 mins).*  To find the portal node, at this time the best way is to run the command `grep public_ipv4 nodes/mytraining-portal.json`.  There's a gem conflict preventing knife from working in local-mode that should be resolved the next time ChefDK ships.
+6. Run `chef-client -z -r 'recipe[chef_classroom]'` (or see the demo steps below)
+
+You should now have a classroom set up.  To find the portal node, at this time the best way is to run the command `grep public_ipv4 nodes/mytraining-portal.json`.  There's a gem conflict preventing knife from working in local-mode that should be resolved the next time ChefDK ships.
 
 Visit the portal node in a web browser.  Additional actions [should be taken](https://github.com/gmiranda23/chef_classroom/issues/14) from the portal.
 
+***Note: at present the Chef Server setup takes ~15 mins and consumes a large majority of the classroom setup time (~30 mins).  The initial compile of guacamole on the portal instance is also significant (~10 mins).  The goal is to stop building these on the fly and use pre-baked images instead (using the chef recipes demonstrated here) once this passes the MVP phase.***
 
 ## Classroom workflow demonstration
 
-The default recipe just creates an entire classroom environment in one fell swoop.  The way ChefDK fundamentals is taught, that leaves a bunch of idle infrastructure laying around before it is ever needed.  That also doesn't match the desired instructor experience.
+The default recipe just creates an entire classroom environment in one fell swoop.  The way ChefDK fundamentals is taught, that leaves a bunch of idle infrastructure consuming cost before we ever use it.  The desired instructor experience is to make this infrastructure available just-in-time.
 
 To achieve the desired instructor experience, follow these steps to see a demo classroom workflow.
 
