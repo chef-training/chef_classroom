@@ -26,19 +26,9 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+require 'chef/provisioning/aws_driver'
 name = node['chef_classroom']['class_name']
 
-require 'chef/provisioning/aws_driver'
-
-with_chef_server  Chef::Config[:chef_server_url],
-  :client_name => Chef::Config[:node_name],
-  :signing_key_filename => Chef::Config[:client_key]
-
-
 machine "#{name}-chefserver" do
-  action :destroy
-end
-
-aws_security_group "training-#{name}-chefserver-sg" do
   action :destroy
 end

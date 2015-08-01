@@ -27,17 +27,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 require 'chef/provisioning/aws_driver'
-
 name = node['chef_classroom']['class_name']
 
-with_chef_server  Chef::Config[:chef_server_url],
-  :client_name => Chef::Config[:node_name],
-  :signing_key_filename => Chef::Config[:client_key]
-
 machine "#{name}-portal" do
-  action :destroy
-end
-
-aws_security_group "training-#{name}-portal-sg" do
   action :destroy
 end

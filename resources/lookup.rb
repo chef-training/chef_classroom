@@ -1,8 +1,7 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: destroy_nodes
+# Resource:: object_lookup
 #
-# Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
 # Copyright:: Copyright (c) 2015 Chef Software, Inc.
 # License:: MIT
@@ -26,16 +25,9 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-require 'chef/provisioning/aws_driver'
-name = node['chef_classroom']['class_name']
+actions :lookup
+default_action :lookup
 
-machine_batch do
-  action :destroy
-  machines 1.upto(count).map { |i| "#{name}-node1-#{i}" }
-  machines 1.upto(count).map { |i| "#{name}-node2-#{i}" }
-  machines 1.upto(count).map { |i| "#{name}-node3-#{i}" }
-end
-
-chef_data_bag "class_machines" do
-  action :delete
-end
+attribute :name,      :kind_of => String, :name_attribute => true
+attribute :tag,       :kind_of => String, :name_attribute => true
+attribute :platform,  :kind_of => String, :name_attribute => true

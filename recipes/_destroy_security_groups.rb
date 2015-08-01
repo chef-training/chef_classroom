@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: destroy_nodes
+# Recipe:: _destroy_security_groups
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -29,13 +29,8 @@
 require 'chef/provisioning/aws_driver'
 name = node['chef_classroom']['class_name']
 
-machine_batch do
-  action :destroy
-  machines 1.upto(count).map { |i| "#{name}-node1-#{i}" }
-  machines 1.upto(count).map { |i| "#{name}-node2-#{i}" }
-  machines 1.upto(count).map { |i| "#{name}-node3-#{i}" }
-end
-
-chef_data_bag "class_machines" do
-  action :delete
+%w(chef_server nodes workstations portal).each do |secgroup|
+	aws_security_group "training-#{name}-#{secgroup}" do
+		action :destroy
+	end
 end

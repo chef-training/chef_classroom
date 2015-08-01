@@ -1,8 +1,7 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: destroy_nodes
+# Provider:: object_lookup
 #
-# Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
 # Copyright:: Copyright (c) 2015 Chef Software, Inc.
 # License:: MIT
@@ -26,16 +25,38 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-require 'chef/provisioning/aws_driver'
-name = node['chef_classroom']['class_name']
 
-machine_batch do
-  action :destroy
-  machines 1.upto(count).map { |i| "#{name}-node1-#{i}" }
-  machines 1.upto(count).map { |i| "#{name}-node2-#{i}" }
-  machines 1.upto(count).map { |i| "#{name}-node3-#{i}" }
-end
+action :lookup do
+  object = new_resource.name
 
-chef_data_bag "class_machines" do
-  action :delete
+  ruby_block "Looking up #{object} machine object" do
+    retries 6
+    retry_delay 10
+    block do
+      aws_object = Chef::Resource::AwsInstance.get_aws_object(
+        object,
+        run_context: run_context,
+        driver: run_context.chef_provisioning.current_driver,
+        managed_entry_store: Chef::Provisioning.chef_managed_entry_store(run_context.cheffish.current_chef_server)
+      )
+      exit(1) if aws_object.public_ip_address.to_s.empty?
+      # only create data_bag_item if there's useable data
+      new_item = Chef::DataBagItem.from_hash({
+        'id' => object,
+        'name' => object,
+        'ec2' => {
+          'public_hostname' => "#{aws_object.public_dns_name}",
+          'public_ipv4' => "#{aws_object.public_ip_address}",
+          'private_ipv4' => "#{aws_object.private_ip_address}"
+          },
+          'platform_family' => "#{new_resource.platform}",
+          'guacamole_user' => 'chef',
+          'guacamole_pass' => 'chef',
+          'tags' => "#{new_resource.tag}"
+      })
+      new_item.data_bag('class_machines')
+      new_item.save
+    end
+  end
+
 end
