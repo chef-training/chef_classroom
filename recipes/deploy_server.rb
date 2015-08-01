@@ -26,28 +26,17 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+require 'chef/provisioning/aws_driver'
 name = node['chef_classroom']['class_name']
 
-require 'chef/provisioning/aws_driver'
-
-with_chef_server  Chef::Config[:chef_server_url],
-  :client_name => Chef::Config[:node_name],
-  :signing_key_filename => Chef::Config[:client_key]
-
-aws_security_group "training-#{name}-chefserver-sg" do
-	action :create
-    inbound_rules '0.0.0.0/0' => [ 22, 443 ]
-end
-
 machine "#{name}-chefserver" do
-  recipe 'chef_classroom::server'
   machine_options :bootstrap_options => {
-    :security_group_ids => "training-#{name}-chefserver-sg",
-    :image_id => 'ami-0d2ce366'
-  }
+                    :security_group_ids => "training-#{name}-chef_server",
+                    :instance_type => server_size,
+                    :image_id => 'ami-0d2ce366'
+                  }
   tag 'chefserver'
+  recipe 'chef_classroom::server'
 end
 
-machine "#{name}-portal" do
-  converge true
-end
+include_recipe "chef_classroom::_refresh_portal"

@@ -26,24 +26,12 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-name = node['chef_classroom']['class_name']
-workstation_count = node['chef_classroom']['workstation_count']
-
 require 'chef/provisioning/aws_driver'
-
-with_chef_server  Chef::Config[:chef_server_url],
-  :client_name => Chef::Config[:node_name],
-  :signing_key_filename => Chef::Config[:client_key]
+name = node['chef_classroom']['class_name']
 
 machine_batch do
   action :destroy
-  machines 1.upto(workstation_count).map { |i| "#{name}-workstation#{i}" }
+  machines 1.upto(count).map { |i| "#{name}-workstation-#{i}" }
 end
 
-aws_security_group "training-#{name}-workstation-sg" do
-  action :destroy
-end
-
-machine "#{name}-portal" do
-    converge true
-end
+include_recipe "chef_classroom::_refresh_portal"

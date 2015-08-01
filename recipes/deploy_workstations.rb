@@ -26,35 +26,25 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-count = node['chef_classroom']['workstation_count']
-name = node['chef_classroom']['class_name']
-
 require 'chef/provisioning/aws_driver'
-
-with_chef_server  Chef::Config[:chef_server_url],
-  :client_name => Chef::Config[:node_name],
-  :signing_key_filename => Chef::Config[:client_key]
+name = node['chef_classroom']['class_name']
 
 # we will need this data_bag later
 chef_data_bag "class_machines"
 
-aws_security_group "training-#{name}-workstation-sg" do
-	action :create
-    inbound_rules '0.0.0.0/0' => [ 22, 80 ]
-end
-
 machine_batch do
   1.upto(count) do |i|
-    machine "#{name}-workstation#{i}" do
-  	  machine_options :bootstrap_options =>{
-        :security_group_ids => "training-#{name}-workstation-sg"
-      }
-  	  recipe 'chef_workstation::full_stack'
+    machine "#{name}-workstation-#{i}" do
+  	  machine_options :bootstrap_options => {
+                        :instance_type => workstation_size,
+                        :security_group_ids => "training-#{name}-workstations"
+                      }
       tag 'workstation'
+  	  recipe 'chef_workstation::full_stack'
       attribute 'guacamole_user', 'chef'
       attribute 'guacamole_pass', 'chef'
 	  end
   end
 end
 
-include_recipe "chef_classroom::deploy_portal"
+include_recipe "chef_classroom::_refresh_portal"

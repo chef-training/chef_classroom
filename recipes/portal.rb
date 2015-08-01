@@ -50,7 +50,6 @@ template '/var/www/html/index.html' do
 end
 
 # create the guacamole user map
-count = node['chef_classroom']['workstation_count']
 name = node['chef_classroom']['class_name']
 
 usermap = Hash.new
@@ -59,10 +58,10 @@ usermap = Hash.new
     "name" => "student#{i}",
     "password" => "chef",
     "machines" => {
-      "workstation" => search("node","tags:workstation AND name:#{name}-workstation#{i}").first,
-      "node1" => search("class_machines","tags:node1 AND name:#{name}-node1#{i}").first,
-      "node2" => search("class_machines","tags:node2 AND name:#{name}-node2#{i}").first,
-      "node3" => search("class_machines","tags:node2 AND name:#{name}-node3#{i}").first
+      "workstation" => search("node","tags:workstation AND name:#{name}-workstation-#{i}").first,
+      "node1" => search("class_machines","tags:node1 AND name:#{name}-node1-#{i}").first,
+      "node2" => search("class_machines","tags:node2 AND name:#{name}-node2-#{i}").first,
+      "node3" => search("class_machines","tags:node2 AND name:#{name}-node3-#{i}").first
     }
   }
 end
