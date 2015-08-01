@@ -41,7 +41,7 @@ module ChefHelpers # Helper Module for general purposes
     node['chef_classroom']['workstation_type']
   end
 
-  def source
+  def class_source_addr
     node['chef_classroom']['ip_range']
   end
 
