@@ -8,7 +8,7 @@ default['chef_classroom']['ip_range'] = '0.0.0.0/0'
 
 # regional aws settings
 default['chef_classroom']['region'] = 'us-east-1'
-default['chef_classroom']['ssh_key_name'] = 'aws-popup-chef'
+default['chef_classroom']['ssh_key_name'] = 'aws-id_rsa'
 
 # tweak workstation_type (only current option is linux -- roadmap: add windows)
 default['chef_classroom']['workstation_type'] = 'linux'

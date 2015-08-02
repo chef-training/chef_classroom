@@ -44,17 +44,18 @@ action :lookup do
         'id' => object,
         'name' => object,
         'ec2' => {
-          'public_hostname' => "#{aws_object.public_dns_name}",
-          'public_ipv4' => "#{aws_object.public_ip_address}",
-          'private_ipv4' => "#{aws_object.private_ip_address}"
+          'public_hostname' => aws_object.public_dns_name,
+          'public_ipv4' => aws_object.public_ip_address,
+          'private_ipv4' => aws_object.private_ip_address
         },
-        'platform_family' => "#{new_resource.platform}",
+        'platform_family' => new_resource.platform,
         'guacamole_user' => 'chef',
         'guacamole_pass' => 'chef',
-        'tags' => "#{new_resource.tag}"
+        'tags' => new_resource.tag
       })
       new_item.data_bag('class_machines')
       new_item.save
     end
   end
+  new_resource.updated_by_last_action(true)
 end

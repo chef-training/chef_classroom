@@ -54,7 +54,7 @@ name = node['chef_classroom']['class_name']
 
 usermap = {}
 1.upto(count).each do |i|
-  usermap["#{i}"] = {
+  usermap[i] = {
     'name' => "student#{i}",
     'password' => 'chef',
     'machines' => {
