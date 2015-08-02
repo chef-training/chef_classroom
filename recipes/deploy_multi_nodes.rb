@@ -34,31 +34,29 @@ machine_batch do
   action :allocate
   1.upto(count) do |i|
     machine "#{name}-node2-#{i}" do
-  	  machine_options create_machine_options(region, 'amzn', node_size, ssh_key, 'nodes')
+      machine_options create_machine_options(region, 'amzn', node_size, ssh_key, 'nodes')
       tag 'node2'
-	  end
-  end
-  1.upto(count) do |i|
+    end
     machine "#{name}-node3-#{i}" do
       machine_options create_machine_options(region, 'windows', node_size, ssh_key, 'nodes')
       tag 'node3'
-	  end
+    end
   end
 end
 
 # track what chef provisioning creates (hackity hack, don't talk back)
-chef_data_bag "class_machines"
+chef_data_bag 'class_machines'
 
 1.upto(count) do |i|
- chef_classroom_lookup "#{name}-node2-#{i}" do
-   tag 'node2'
-   platform 'rhel'
- end
- chef_classroom_lookup "#{name}-node3-#{i}" do
-   tag 'node3'
-   platform 'windows'
- end
+  chef_classroom_lookup "#{name}-node2-#{i}" do
+    tag 'node2'
+    platform 'rhel'
+  end
+  chef_classroom_lookup "#{name}-node3-#{i}" do
+    tag 'node3'
+    platform 'windows'
+  end
 end
 #
 
-include_recipe "chef_classroom::_refresh_portal"
+include_recipe 'chef_classroom::_refresh_portal'

@@ -36,4 +36,4 @@ machine "#{name}-chefserver" do
   recipe 'chef_classroom::server'
 end
 
-include_recipe "chef_classroom::_refresh_portal"
+include_recipe 'chef_classroom::_refresh_portal'

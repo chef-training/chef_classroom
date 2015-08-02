@@ -31,7 +31,7 @@ with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
 # the portal will need this data_bag later
-chef_data_bag "class_machines"
+chef_data_bag 'class_machines'
 
 machine "#{name}-portal" do
   machine_options create_machine_options(region, 'centos', portal_size, ssh_key, 'portal')

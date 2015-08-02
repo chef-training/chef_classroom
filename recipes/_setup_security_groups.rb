@@ -31,29 +31,29 @@ with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
 aws_security_group "training-#{name}-portal" do
-	action :create
-  inbound_rules class_source_addr => [ 22, 80, 8080 ]
+  action :create
+  inbound_rules class_source_addr => [22, 80, 8080]
 end
 
 aws_security_group "training-#{name}-workstations" do
-	action :create
-  inbound_rules class_source_addr					=> [ 22 ],
-								"training-#{name}-portal" => [ 22 ]		if type == 'linux'
-  inbound_rules class_source_addr					=> [ 3389 ],
-								"training-#{name}-portal" => [ 3389 ] if type == 'windows'
+  action :create
+  inbound_rules class_source_addr         => [22],
+                "training-#{name}-portal" => [22]   if type == 'linux'
+  inbound_rules class_source_addr         => [3389],
+                "training-#{name}-portal" => [3389] if type == 'windows'
 end
 
 aws_security_group "training-#{name}-nodes" do
-	action :create
-	inbound_rules "training-#{name}-workstations" => [ 22, 5985, 5986 ],
-		   					"training-#{name}-portal"		 		=> [ 22, 5985, 5986 ], # for bootstrapping from portal
-								class_source_addr								=> [ 22, 5985, 5986 ] # until portal does bootstrapping
+  action :create
+  inbound_rules "training-#{name}-workstations" => [22, 5985, 5986],
+                "training-#{name}-portal"       => [22, 5985, 5986], # for bootstrapping from portal
+                class_source_addr               => [22, 5985, 5986] # until portal does bootstrapping
 end
 
 aws_security_group "training-#{name}-chef_server" do
-	action :create
-  inbound_rules class_source_addr					=> [ 80, 443 ],
-								"training-#{name}-nodes"	=> [ 443 ],
-								"training-#{name}-portal" => [ 22 ], # for bootstrapping from portal
-								class_source_addr					=> [ 22 ] # until portal does bootstrapping
+  action :create
+  inbound_rules class_source_addr         => [80, 443],
+                "training-#{name}-nodes"  => [443],
+                "training-#{name}-portal" => [22], # for bootstrapping from portal
+                class_source_addr         => [22] # until portal does bootstrapping
 end

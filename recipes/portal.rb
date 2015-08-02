@@ -26,46 +26,54 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-service "iptables" do
-  action [ :disable, :stop ]
+service 'iptables' do
+  action [:disable, :stop]
 end
 
 package 'httpd'
 
 service 'httpd' do
-	supports :status => true, :restart => true, :reload => true
-	action [ :start, :enable ]
+  supports :status => true, :restart => true, :reload => true
+  action [:start, :enable]
 end
 
 template '/var/www/html/index.html' do
-	source 'index.html.erb'
-	mode '0644'
-	variables({
-    :workstations => search("node","tags:workstation"),
-	  :node1s => search("class_machines","tags:node1"),
-	  :node2s => search("class_machines","tags:node2"),
-	  :node3s => search("class_machines","tags:node3"),
-	  :chefserver => search("node","tags:chefserver")
+  source 'index.html.erb'
+  mode '0644'
+  variables({
+    :workstations => search('node', 'tags:workstation'),
+    :node1s => search('class_machines', 'tags:node1'),
+    :node2s => search('class_machines', 'tags:node2'),
+    :node3s => search('class_machines', 'tags:node3'),
+    :chefserver => search('node', 'tags:chefserver')
   })
 end
 
 # create the guacamole user map
 name = node['chef_classroom']['class_name']
 
-usermap = Hash.new
+usermap = {}
 1.upto(count).each do |i|
-  usermap["#{i}"] = {
-    "name" => "student#{i}",
-    "password" => "chef",
-    "machines" => {
-      "workstation" => search("node","tags:workstation AND name:#{name}-workstation-#{i}").first,
-      "node1" => search("class_machines","tags:node1 AND name:#{name}-node1-#{i}").first,
-      "node2" => search("class_machines","tags:node2 AND name:#{name}-node2-#{i}").first,
-      "node3" => search("class_machines","tags:node2 AND name:#{name}-node3-#{i}").first
+  usermap[i] = {
+    'name' => "student#{i}",
+    'password' => 'chef',
+    'machines' => {
+      'workstation' => search(
+        'node', "tags:workstation AND name:#{name}-workstation-#{i}"
+      ).first,
+      'node1' => search(
+        'class_machines', "tags:node1 AND name:#{name}-node1-#{i}"
+      ).first,
+      'node2' => search(
+        'class_machines', "tags:node2 AND name:#{name}-node2-#{i}"
+      ).first,
+      'node3' => search(
+        'class_machines', "tags:node2 AND name:#{name}-node3-#{i}"
+      ).first
     }
   }
 end
 
-#node.default['guacamole']['usermap'] = usermap
+# node.default['guacamole']['usermap'] = usermap
 
 include_recipe 'guacamole'
