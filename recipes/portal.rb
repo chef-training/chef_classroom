@@ -49,31 +49,17 @@ template '/var/www/html/index.html' do
   })
 end
 
-# create the guacamole user map
-name = node['chef_classroom']['class_name']
-
-usermap = {}
-1.upto(count).each do |i|
-  usermap[i] = {
-    'name' => "student#{i}",
-    'password' => 'chef',
-    'machines' => {
-      'workstation' => search(
-        'node', "tags:workstation AND name:#{name}-workstation-#{i}"
-      ).first,
-      'node1' => search(
-        'class_machines', "tags:node1 AND name:#{name}-node1-#{i}"
-      ).first,
-      'node2' => search(
-        'class_machines', "tags:node2 AND name:#{name}-node2-#{i}"
-      ).first,
-      'node3' => search(
-        'class_machines', "tags:node2 AND name:#{name}-node3-#{i}"
-      ).first
-    }
-  }
-end
-
-# node.default['guacamole']['usermap'] = usermap
-
+# lazy create the guacamole user map and monkeypatch it
+# search returns nil during compilation
 include_recipe 'guacamole'
+
+chef_gem 'chef-rewind'
+require 'chef/rewind'
+
+rewind 'template[/etc/guacamole/user-mapping.xml]' do
+  variables(
+    lazy do
+      { :usermap => guacamole_user_map }
+    end
+  )
+end
