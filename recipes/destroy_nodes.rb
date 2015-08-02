@@ -37,6 +37,6 @@ machine_batch do
   machines 1.upto(count).map { |i| "#{name}-node3-#{i}" }
 end
 
-chef_data_bag "class_machines" do
+chef_data_bag 'class_machines' do
   action :delete
 end

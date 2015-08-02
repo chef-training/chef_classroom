@@ -31,18 +31,18 @@ with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
 # we will need this data_bag later
-chef_data_bag "class_machines"
+chef_data_bag 'class_machines'
 
 machine_batch do
   1.upto(count) do |i|
     machine "#{name}-workstation-#{i}" do
       machine_options create_machine_options(region, 'amzn', workstation_size, ssh_key, 'nodes')
       tag 'workstation'
-  	  recipe 'chef_workstation::full_stack'
+      recipe 'chef_workstation::full_stack'
       attribute 'guacamole_user', 'chef'
       attribute 'guacamole_pass', 'chef'
-	  end
+    end
   end
 end
 
-include_recipe "chef_classroom::_refresh_portal"
+include_recipe 'chef_classroom::_refresh_portal'

@@ -25,7 +25,6 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
 action :lookup do
   object = new_resource.name
 
@@ -48,15 +47,14 @@ action :lookup do
           'public_hostname' => "#{aws_object.public_dns_name}",
           'public_ipv4' => "#{aws_object.public_ip_address}",
           'private_ipv4' => "#{aws_object.private_ip_address}"
-          },
-          'platform_family' => "#{new_resource.platform}",
-          'guacamole_user' => 'chef',
-          'guacamole_pass' => 'chef',
-          'tags' => "#{new_resource.tag}"
+        },
+        'platform_family' => "#{new_resource.platform}",
+        'guacamole_user' => 'chef',
+        'guacamole_pass' => 'chef',
+        'tags' => "#{new_resource.tag}"
       })
       new_item.data_bag('class_machines')
       new_item.save
     end
   end
-
 end

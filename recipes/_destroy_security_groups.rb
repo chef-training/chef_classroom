@@ -32,7 +32,7 @@ with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
 %w(chef_server nodes workstations portal).each do |secgroup|
-	aws_security_group "training-#{name}-#{secgroup}" do
-		action :destroy
-	end
+  aws_security_group "training-#{name}-#{secgroup}" do
+    action :destroy
+  end
 end

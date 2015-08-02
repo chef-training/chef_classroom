@@ -27,12 +27,12 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 module ChefHelpers # Helper Module for general purposes
-
+  #
   # an odd recursive lookup bug prevents this one from being a good idea
   # def name
   #   node['chef_classroom']['class_name']
   # end
-
+  #
   def count
     node['chef_classroom']['number_of_students']
   end
@@ -107,7 +107,7 @@ module ChefHelpers # Helper Module for general purposes
       when 'marketplace'
         'ami-0b42423b'
       end
-
+    #
     # when 'eu-west-1'
     #   case type
     #   when 'amzn'
@@ -179,7 +179,7 @@ module ChefHelpers # Helper Module for general purposes
     #   when 'marketplace'
     #     'ami-d4e5f6g7'
     #   end
-
+    #
     end
   end
 
@@ -202,7 +202,7 @@ module ChefHelpers # Helper Module for general purposes
       :ssh_username => lookup_ami_user(type),
       :convergence_options => {
         :ssl_verify_mode => :verify_none,
-        :chef_version => "12.2.1"
+        :chef_version => '12.2.1'
       },
       :bootstrap_options => {
         :instance_type => size,
@@ -216,7 +216,6 @@ module ChefHelpers # Helper Module for general purposes
     end
     options
   end
-
 end
 
 Chef::Recipe.send(:include, ChefHelpers)
