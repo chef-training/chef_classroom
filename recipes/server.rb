@@ -26,7 +26,9 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-execute 'chef-server-ctl install opscode-manage'
+execute 'chef-server-ctl install opscode-manage' do
+  creates '/etc/yum.repos.d/chef-stable.repo'
+end
 
 %w(opscode-manage opscode).each do |dir|
   directory dir
@@ -40,6 +42,10 @@ template '/etc/opscode/chef-server.rb' do
   source 'chef-server.rb.erb'
 end
 
-execute 'chef-server-ctl reconfigure'
+execute 'chef-server-ctl reconfigure' do
+  creates '/etc/opscode/pivotal.pem'
+end
 
-execute 'opscode-manage-ctl reconfigure'
+execute 'opscode-manage-ctl reconfigure' do
+  creates '/etc/opscode-manage/secrets.rb'
+end
