@@ -216,6 +216,26 @@ module ChefHelpers # Helper Module for general purposes
     end
     options
   end
+
+  def guacamole_user_map
+    name = node['chef_classroom']['class_name']
+    usermap = {}
+    1.upto(count).each do |i|
+      usermap[i] = {
+        'name' => "student#{i}",
+        'password' => 'chef',
+        'machines' => {
+          'workstation' => search(
+              'node', "tags:workstation AND name:#{name}-workstation-#{i}"
+            ).first,
+          'node1' => data_bag_item('class_machines', "#{name}-node1-#{i}"),
+          'node2' => data_bag_item('class_machines', "#{name}-node2-#{i}"),
+          'node3' => data_bag_item('class_machines', "#{name}-node3-#{i}")
+        }
+      }
+    end
+    usermap
+  end
 end
 
 Chef::Recipe.send(:include, ChefHelpers)
