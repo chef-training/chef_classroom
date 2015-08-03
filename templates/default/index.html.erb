@@ -135,7 +135,9 @@
           <% @chefserver.each do |server| -%>
           <tr>
             <td><%= "Chef Server" %></td>
-            <td><%= server['ec2']['public_ipv4'] %></td>
+            <td><a href="https://<%= server['ec2']['public_ipv4'] -%>">
+              <%= server['ec2']['public_ipv4'] %></a>
+            </td>
           <%end -%>
           </tr>
         </table>
