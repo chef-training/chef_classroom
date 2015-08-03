@@ -239,7 +239,7 @@ module ChefHelpers # Helper Module for general purposes
         'password' => 'chef',
         'machines' => {}
       }
-      usermap[i]['machines']['workstation'] = workstation unless workstation.empty?
+      usermap[i]['machines']['workstation'] = workstation unless workstation.nil?
       usermap[i]['machines']['node1'] = node1 unless node1.nil?
       usermap[i]['machines']['node2'] = node2 unless node2.nil?
       usermap[i]['machines']['node3'] = node3 unless node3.nil?

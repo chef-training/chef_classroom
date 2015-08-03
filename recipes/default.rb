@@ -27,8 +27,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 include_recipe 'chef_classroom::_setup_security_groups'
-include_recipe 'chef_classroom::deploy_workstations'
 include_recipe 'chef_classroom::deploy_portal'
+include_recipe 'chef_classroom::deploy_workstations'
 include_recipe 'chef_classroom::deploy_first_nodes'
 include_recipe 'chef_classroom::deploy_server'
 include_recipe 'chef_classroom::deploy_multi_nodes'
