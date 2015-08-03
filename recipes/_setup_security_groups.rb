@@ -52,8 +52,7 @@ end
 
 aws_security_group "training-#{name}-chef_server" do
   action :create
-  inbound_rules class_source_addr         => [80, 443],
+  inbound_rules class_source_addr         => [22, 80, 443], # 22 only until portal does bootstrapping
                 "training-#{name}-nodes"  => [443],
-                "training-#{name}-portal" => [22], # for bootstrapping from portal
-                class_source_addr         => [22] # until portal does bootstrapping
+                "training-#{name}-portal" => [22] # for bootstrapping from portal
 end
