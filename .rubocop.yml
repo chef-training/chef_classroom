@@ -44,3 +44,6 @@ Style/Documentation:
 Style/IfUnlessModifier:
   Enabled: false
 
+# Offense count: 1
+Metrics/AbcSize:
+  Max: 30
