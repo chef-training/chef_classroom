@@ -35,4 +35,4 @@ machine_batch do
   machines 1.upto(count).map { |i| "#{name}-workstation-#{i}" }
 end
 
-include_recipe 'chef_classroom::_refresh_portal'
+# include_recipe 'chef_classroom::_refresh_portal'

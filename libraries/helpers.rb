@@ -217,22 +217,32 @@ module ChefHelpers # Helper Module for general purposes
     options
   end
 
+  def validate_data_bag_item(item)
+    Chef::DataBagItem.load('class_machines', item)
+  rescue Net::HTTPServerException => error
+    nil if error.response.code == '404'
+  end
+
   def guacamole_user_map
     name = node['chef_classroom']['class_name']
     usermap = {}
     1.upto(count).each do |i|
+      # do the nodes we want to map exist?
+      workstation = search(
+        'node', "tags:workstation AND name:#{name}-workstation-#{i}"
+        ).first
+      node1 = validate_data_bag_item("#{name}-node1-#{i}")
+      node2 = validate_data_bag_item("#{name}-node2-#{i}")
+      node3 = validate_data_bag_item("#{name}-node3-#{i}")
       usermap[i] = {
         'name' => "student#{i}",
         'password' => 'chef',
-        'machines' => {
-          'workstation' => search(
-              'node', "tags:workstation AND name:#{name}-workstation-#{i}"
-            ).first,
-          'node1' => data_bag_item('class_machines', "#{name}-node1-#{i}"),
-          'node2' => data_bag_item('class_machines', "#{name}-node2-#{i}"),
-          'node3' => data_bag_item('class_machines', "#{name}-node3-#{i}")
-        }
+        'machines' => {}
       }
+      usermap[i]['machines']['workstation'] = workstation unless workstation.empty?
+      usermap[i]['machines']['node1'] = node1 unless node1.nil?
+      usermap[i]['machines']['node2'] = node2 unless node2.nil?
+      usermap[i]['machines']['node3'] = node3 unless node3.nil?
     end
     usermap
   end
