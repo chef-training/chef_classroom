@@ -30,6 +30,6 @@ require 'chef/provisioning/aws_driver'
 name = node['chef_classroom']['class_name']
 
 machine "#{name}-portal" do
-  machine_options :ssh_username => 'root'
+  machine_options create_machine_options(region, 'centos', portal_size, ssh_key, 'portal')
   converge true
 end

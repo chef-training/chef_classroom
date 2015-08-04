@@ -51,10 +51,14 @@ chef_data_bag 'class_machines'
   chef_classroom_lookup "#{name}-node2-#{i}" do
     tag 'node2'
     platform 'rhel'
+    guac_user 'ec2-user'
+    guac_key "/root/.ssh/#{ssh_key}"
   end
   chef_classroom_lookup "#{name}-node3-#{i}" do
     tag 'node3'
     platform 'windows'
+    guac_user 'Administrator'
+    guac_pass 'gets_polled_automatically'
   end
 end
 #

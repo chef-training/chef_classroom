@@ -29,5 +29,8 @@ actions :lookup
 default_action :lookup
 
 attribute :name,      :kind_of => String, :name_attribute => true
-attribute :tag,       :kind_of => String, :name_attribute => true
-attribute :platform,  :kind_of => String, :name_attribute => true
+attribute :tag,       :kind_of => String
+attribute :platform,  :kind_of => String
+attribute :guac_user, :kind_of => String
+attribute :guac_pass, :kind_of => String
+attribute :guac_key,  :kind_of => String

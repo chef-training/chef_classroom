@@ -40,7 +40,7 @@ machine_batch do
       tag 'workstation'
       recipe 'chef_workstation::full_stack'
       attribute 'guacamole_user', 'chef'
-      attribute 'guacamole_pass', 'chef'
+      attribute 'guacamole_pass', nil
     end
   end
 end
