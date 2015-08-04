@@ -28,9 +28,8 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-name = node['chef_classroom']['class_name']
 
-aws_key_pair "#{name}-workstation_key" do
+aws_key_pair workstation_key do
   allow_overwrite false
-	private_key_path "#{ENV['HOME']}/.ssh/#{name}-workstation_key"
+	private_key_path "#{ENV['HOME']}/.ssh/#{workstation_key}"
 end

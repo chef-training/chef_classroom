@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: _portal_ssh_key
+# Recipe:: _destroy_workstation_key
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -30,11 +30,11 @@ require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
-aws_key_pair "#{name}-workstation_key" do
+aws_key_pair workstation_key do
   action :destroy
 end
 
-file "#{ENV['HOME']}/.ssh/#{name}-workstation_key" do
+file "#{ENV['HOME']}/.ssh/#{workstation_key}" do
   action :delete
   backup false
 end

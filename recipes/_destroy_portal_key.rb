@@ -28,13 +28,13 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-name = node['chef_classroom']['class_name']
 
-aws_key_pair "#{name}-portal_key" do
+
+aws_key_pair portal_key do
   action :destroy
 end
 
-file "#{ENV['HOME']}/.ssh/#{name}-portal_key" do
+file "#{ENV['HOME']}/.ssh/#{portal_key}" do
   action :delete
   backup false
 end

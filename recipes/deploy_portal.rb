@@ -29,7 +29,6 @@
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
-workstation_ssh_key = "#{name}-workstation_key"
 
 # the portal will need this data_bag later
 chef_data_bag 'class_machines'
@@ -42,7 +41,7 @@ aws_security_group "training-#{name}-portal" do
 end
 
 machine "#{name}-portal" do
-  machine_options create_machine_options(region, 'centos', portal_size, workstation_ssh_key, 'portal')
+  machine_options create_machine_options(region, 'centos', portal_size, workstation_key, 'portal')
   recipe 'chef_portal::fundamentals_3x'
   converge true
 end

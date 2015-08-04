@@ -36,11 +36,11 @@ machine_batch do
   action :allocate
   1.upto(count) do |i|
     machine "#{name}-node2-#{i}" do
-      machine_options create_machine_options(region, 'amzn', node_size, ssh_key, 'nodes')
+      machine_options create_machine_options(region, 'amzn', node_size, portal_key, 'nodes')
       tag 'node2'
     end
     machine "#{name}-node3-#{i}" do
-      machine_options create_machine_options(region, 'windows', node_size, ssh_key, 'nodes')
+      machine_options create_machine_options(region, 'windows', node_size, portal_key, 'nodes')
       tag 'node3'
     end
   end

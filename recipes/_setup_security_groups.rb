@@ -39,24 +39,20 @@ aws_security_group "training-#{name}-workstations" do
   action :create
   inbound_rules class_source_addr         => [22],
                 node['ec2']['local_ipv4'] => [22]   if type == 'linux'
-                # "training-#{name}-portal" => [22]   if type == 'linux'
   inbound_rules class_source_addr         => [3389],
                 node['ec2']['local_ipv4'] => [22]   if type == 'windows'
-                # "training-#{name}-portal" => [3389] if type == 'windows'
 end
 
 aws_security_group "training-#{name}-nodes" do
   action :create
   inbound_rules "training-#{name}-workstations" => [22, 5985, 5986],
                 node['ec2']['local_ipv4']       => [22, 5985, 5986],
-                # "training-#{name}-portal"       => [22, 5985, 5986], # for bootstrapping from portal
-                class_source_addr               => [22, 5985, 5986] # until portal does bootstrapping
+                class_source_addr               => [22, 5985, 5986]
 end
 
 aws_security_group "training-#{name}-chef_server" do
   action :create
-  inbound_rules class_source_addr         => [22, 80, 443], # 22 only until portal does bootstrapping
+  inbound_rules class_source_addr         => [80, 443],
                 "training-#{name}-nodes"  => [443],
-                node['ec2']['local_ipv4'] => [22],
-                # "training-#{name}-portal" => [22] # for bootstrapping from portal
+                node['ec2']['local_ipv4'] => [22]
 end

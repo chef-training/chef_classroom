@@ -10,9 +10,6 @@ default['chef_classroom']['ip_range'] = '0.0.0.0/0'
 default['chef_classroom']['region'] = 'us-east-1'
 default['chef_classroom']['iam_instance_profile'] = 'arn:aws:iam::458523137226:instance-profile/provisioner'
 
-# this should be deprecated soon
-default['chef_classroom']['ssh_key_name'] = 'aws-popup-chef'
-
 # tweak workstation_type (only current option is linux -- roadmap: add windows)
 default['chef_classroom']['workstation_type'] = 'linux'
 
