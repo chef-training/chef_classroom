@@ -31,6 +31,8 @@ with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
 include_recipe 'chef_portal::_refresh_iam_creds'
+include_recipe 'chef_portal::_setup_security_groups'
+include_recipe 'chef_portal::_setup_portal_key'
 
 # we will need this data_bag later
 chef_data_bag 'class_machines'
