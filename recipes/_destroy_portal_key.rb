@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: _destroy_security_groups
+# Recipe:: _portal_ssh_key
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -28,11 +28,13 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-
 name = node['chef_classroom']['class_name']
 
-%w(chef_server nodes workstations).each do |secgroup|
-  aws_security_group "training-#{name}-#{secgroup}" do
-    action :destroy
-  end
+aws_key_pair "#{name}-portal_key" do
+  action :destroy
+end
+
+file "#{ENV['HOME']}/.ssh/#{name}-portal_key" do
+  action :delete
+  backup false
 end

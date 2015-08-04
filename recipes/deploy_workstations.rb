@@ -30,6 +30,8 @@ require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
+include_recipe 'chef_portal::_refresh_iam_creds'
+
 # we will need this data_bag later
 chef_data_bag 'class_machines'
 

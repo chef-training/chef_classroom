@@ -33,3 +33,9 @@ name = node['chef_classroom']['class_name']
 machine "#{name}-portal" do
   action :destroy
 end
+
+aws_security_group "training-#{name}-portal" do
+  action :destroy
+end
+
+include_recipe 'chef_classroom::_destroy_workstation_key'

@@ -8,3 +8,4 @@ version '0.2.0'
 
 depends 'chef_workstation'
 depends 'guacamole'
+depends 'chef_portal'

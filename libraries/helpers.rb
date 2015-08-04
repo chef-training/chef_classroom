@@ -214,6 +214,9 @@ module ChefHelpers # Helper Module for general purposes
     if type == 'windows'
       options[:is_windows] = true
     end
+
+    options[:bootstrap_options][:iam_instance_profile] = 'arn:aws:iam::458523137226:instance-profile/provisioner'
+
     options
   end
 

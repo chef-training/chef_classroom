@@ -30,6 +30,8 @@ require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
+include_recipe 'chef_portal::_refresh_iam_creds'
+
 machine "#{name}-chefserver" do
   machine_options create_machine_options(region, 'marketplace', server_size, ssh_key, 'chef_server')
   tag 'chefserver'

@@ -30,6 +30,8 @@ require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
+include_recipe 'chef_portal::_refresh_iam_creds'
+
 machine_batch do
   action :destroy
   machines 1.upto(count).map { |i| "#{name}-workstation-#{i}" }
