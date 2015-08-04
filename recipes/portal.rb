@@ -49,6 +49,16 @@ template '/var/www/html/index.html' do
   })
 end
 
+# here's some ugliness.  we need to get the aws ssh private key on the portal
+# node to enable guacamole connections.  but that's okay because once issue #15
+# is resolved, we get this on the portal for free
+template "/root/.ssh/#{ssh_key}" do
+  source 'ssh_key.erb'
+  owner 'root'
+  group 'root'
+  mode '0600'
+end
+
 # lazy create the guacamole user map and monkeypatch it
 # search returns nil during compilation
 include_recipe 'guacamole'

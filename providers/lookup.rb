@@ -45,12 +45,14 @@ action :lookup do
         'name' => object,
         'ec2' => {
           'public_hostname' => aws_object.public_dns_name,
+          'local_hostname' => aws_object.private_dns_name,
           'public_ipv4' => aws_object.public_ip_address,
           'private_ipv4' => aws_object.private_ip_address
         },
         'platform_family' => new_resource.platform,
-        'guacamole_user' => 'chef',
-        'guacamole_pass' => 'chef',
+        'guacamole_user' => new_resource.guac_user,
+        'guacamole_pass' => new_resource.guac_pass,
+        'guacamole_key' => new_resource.guac_key,
         'tags' => new_resource.tag
       })
       new_item.data_bag('class_machines')
