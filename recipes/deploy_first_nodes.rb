@@ -50,7 +50,7 @@ chef_data_bag 'class_machines'
     tag 'node1'
     platform 'rhel'
     guac_user 'ec2-user'
-    guac_key "/root/.ssh/#{ssh_key}"
+    guac_key "/root/.ssh/#{portal_key}"
   end
 end
 #
