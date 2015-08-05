@@ -218,7 +218,7 @@ module ChefHelpers # Helper Module for general purposes
     if type == 'windows'
       options[:is_windows] = true
     end
-    if type == 'portal'
+    if group == 'portal'
       options[:bootstrap_options][:iam_instance_profile] = node['chef_classroom']['iam_instance_profile']
     end
     options

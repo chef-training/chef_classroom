@@ -30,12 +30,14 @@ require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
-include_recipe 'chef_portal::_refresh_iam_creds'
-include_recipe 'chef_portal::_setup_security_groups'
-include_recipe 'chef_portal::_setup_portal_key'
+# we need this data_bag sooner rather than later
+chef_data_bag 'class_machines' do
+  action :nothing
+end.run_action(:create)
 
-# we will need this data_bag later
-chef_data_bag 'class_machines'
+include_recipe 'chef_portal::_refresh_iam_creds'
+include_recipe 'chef_classroom::_setup_portal_key'
+include_recipe 'chef_classroom::_setup_security_groups'
 
 machine_batch do
   1.upto(count) do |i|
