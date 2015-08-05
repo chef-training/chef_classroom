@@ -54,7 +54,7 @@ chef_data_bag 'class_machines'
     tag 'node2'
     platform 'rhel'
     guac_user 'ec2-user'
-    guac_key "/root/.ssh/#{ssh_key}"
+    guac_key "/root/.ssh/#{portal_key}"
   end
   chef_classroom_lookup "#{name}-node3-#{i}" do
     tag 'node3'
