@@ -30,11 +30,6 @@ require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
-# aws_security_group "training-#{name}-portal" do
-#   action :create
-#   inbound_rules class_source_addr => [22, 80, 8080]
-# end
-
 aws_security_group "training-#{name}-workstations" do
   action :create
   inbound_rules class_source_addr         => [22],
