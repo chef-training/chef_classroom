@@ -57,8 +57,12 @@ module ChefHelpers # Helper Module for general purposes
     node['chef_classroom']['region']
   end
 
-  def ssh_key
-    node['chef_classroom']['ssh_key_name']
+  def portal_key
+    node['chef_classroom']['class_name'] + "-portal_key"
+  end
+
+  def workstation_key
+    node['chef_classroom']['class_name'] + "-workstation_key"
   end
 
   def server_size
@@ -214,6 +218,12 @@ module ChefHelpers # Helper Module for general purposes
     if type == 'windows'
       options[:is_windows] = true
     end
+    if group == 'portal'
+      options[:bootstrap_options][:iam_instance_profile] = node['chef_classroom']['iam_instance_profile']
+    end
+    unless group == 'portal'
+      options[:use_private_ip_for_ssh] = true
+    end
     options
   end
 
@@ -246,7 +256,12 @@ module ChefHelpers # Helper Module for general purposes
     end
     usermap
   end
+
+  def iam_role_name
+    node['chef_classroom']['iam_instance_profile'].split('/')[1]
+  end
 end
+
 
 Chef::Recipe.send(:include, ChefHelpers)
 Chef::Resource.send(:include, ChefHelpers)

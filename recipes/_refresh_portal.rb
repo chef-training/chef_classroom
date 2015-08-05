@@ -26,10 +26,4 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-require 'chef/provisioning/aws_driver'
-name = node['chef_classroom']['class_name']
-
-machine "#{name}-portal" do
-  machine_options create_machine_options(region, 'centos', portal_size, ssh_key, 'portal')
-  converge true
-end
+include_recipe 'chef_portal::fundamentals_3x_webapp'

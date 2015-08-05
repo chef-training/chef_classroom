@@ -30,17 +30,23 @@ require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
-# we will need this data_bag later
-chef_data_bag 'class_machines'
+# we need this data_bag sooner rather than later
+chef_data_bag 'class_machines' do
+  action :nothing
+end.run_action(:create)
+
+include_recipe 'chef_portal::_refresh_iam_creds'
+include_recipe 'chef_classroom::_setup_portal_key'
+include_recipe 'chef_classroom::_setup_security_groups'
 
 machine_batch do
   1.upto(count) do |i|
     machine "#{name}-workstation-#{i}" do
-      machine_options create_machine_options(region, 'amzn', workstation_size, ssh_key, 'nodes')
+      machine_options create_machine_options(region, 'amzn', workstation_size, portal_key, 'nodes')
       tag 'workstation'
       recipe 'chef_workstation::full_stack'
       attribute 'guacamole_user', 'chef'
-      attribute 'guacamole_pass', nil
+      attribute 'guacamole_pass', 'chef'
     end
   end
 end
