@@ -41,8 +41,8 @@ end
 aws_security_group "training-#{name}-nodes" do
   action :create
   inbound_rules "training-#{name}-workstations" => [22, 5985, 5986],
-                node['ec2']['local_ipv4']       => [22, 5985, 5986],
-                class_source_addr               => [22, 5985, 5986]
+                node['ec2']['local_ipv4']       => [22, 3389, 5985, 5986],
+                class_source_addr               => [22, 3389, 5985, 5986]
 end
 
 aws_security_group "training-#{name}-chef_server" do
