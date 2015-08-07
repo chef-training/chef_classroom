@@ -32,7 +32,7 @@ To set up a Chef Training Classroom, do the following:
     ```
 2. Set the ARN name of your IAM Instance Profile in `attributes/default.rb` as the value of `chef_classroom['iam_instance_profile']`.
 
-3. Additional options may be set, including automatic localization via the `chef_classroom['region']` attribute (note: so far only AWS US regions available).  Instructors are ***strongly encouraged*** to replace the value of `chef_classroom['ip_range']` with an appropriate IP address range (e.g. "184.106.28.82/24") for any classroom being managed.  The permissions and security settings of these instances are... lax.  However, none of these changes are required for basic (demo) use of this repo.
+3. Additional options may be set, including automatic localization via the `chef_classroom['region']` attribute (note: so far only AWS US regions available).  Instructors are ***strongly encouraged*** to replace the value of `chef_classroom['ip_range']` with an appropriate IP address range (e.g. "184.106.28.82/32") for any classroom being managed.  The permissions and security settings of these instances are... lax.  However, none of these changes are required for basic (demo) use of this repo.
 
 5. Run `berks vendor cookbooks`
 
@@ -42,16 +42,29 @@ To set up a Chef Training Classroom, do the following:
 
 Visit the portal node in a web browser.  Additional actions [should be taken][WebUIactions] from the portal to run your class.  These actions are not yet available.  See the Demo workflow below and follow steps 1-3 to get an entire classroom provisioned for training material verification.
 
-Roadmap note: setup steps 1-6 could be handled by shipping a pre-baked Chef Classroom AMI.  See the Roadmap section below for intended usage and next steps.
+*Setup steps 1-6 (above) could be handled by shipping a pre-baked Chef Classroom AMI.  See the Roadmap section below for intended usage and next steps.*
 
 ## Classroom Workflow Demo
 Only Chef Fundamentals 3.x workflow is currently supported.
 
 Additional actions [from the web UI][WebUIactions] are not yet available.  So to see the instructor experience, you have to run chef-provisioning recipes via the local shell.  The mock buttons in the web UI should eventually do this.  But for now, your steps to see the classroom go are:
 
-1. SSH to the portal instance. (See AWS Requirements for details)  Run the command `cd chef_classroom`.
+1. SSH to the portal instance and cd into the `chef_classroom` directory.
 
-2. Presently, you have to set your classroom attributes again once on the portal instance.  On the portal instance, edit `attributes/default.rb` again with all of your desired settings.  Every time you make a local modification to the code in the `chef_classroom` cookbook dir, you must re-vendor cookbooks.  Run the following command: `rm -rf cookbooks/ ; berks vendor cookbooks`.
+    ```
+    ssh root@PORTAL_ADDRESS -i ~/.ssh/CLASSNAME-workstation_key
+    [root@PORTAL_ADDRESS]# cd chef_classroom
+    ```
+
+2. Presently, you have to set your classroom attributes once again on the portal instance.  **Ensure you set the same ARN name as you used to provision the portal instance.  Again, set all of your desired classroom settings here.** 
+Every time you make a local modification to the code in the `chef_classroom` cookbook dir, you must re-vendor cookbooks.  (TODO: fix this duplicate step)
+
+     ```
+     [root@PORTAL_ADDRESS chef_classroom]# vi attributes/default.rb
+     [root@PORTAL_ADDRESS chef_classroom]# rm -rf cookbooks
+     [root@PORTAL_ADDRESS chef_classroom]# berks vendor cookbooks
+     ```
+
 
 3. To create the entire classroom in one fell swoop, run the default recipe.
 
@@ -100,6 +113,8 @@ When you are finished with the classroom environment, all nodes must be destroye
 
 ## Known issues
 
+  * Depending on your workflow, sometimes the portal page may not properly refresh.  You can force a refresh of the portal page with `chef-client -z -r 'recipe[chef_classroom::_refresh_portal]`
+
   * On occasion, chef-provisioning-aws may lose track of an object it provisioned and you will get errors similar to
 
     ```
@@ -126,7 +141,7 @@ Other normal EC2 error conditions apply (e.g. account quotas, IAM permissions, e
 If you started this environment from a workstation using chef-provisioning, you now have a new ssh key called "#{name}-workstation_key", where `name` is the name of the classroom you set.  If you used defaults, it is located in `~/.ssh/mytraining-workstation_key`.  To reach your workstation, run the following command from a terminal.
 
   ```
-  ssh -i ~/.ssh/mytraining-workstation_key -l root <ip of your instance>
+  ssh -i ~/.ssh/CLASSNAME-workstation_key -l root <ip of your instance>
 
   ```
 By default, the [chef_portal][portal] cookbook sets up password auth on the portal instance.  Alternatively, you may SSH in to the portal instance as the portal user using the portal password from that cookbook.
