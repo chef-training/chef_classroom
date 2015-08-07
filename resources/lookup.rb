@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Resource:: object_lookup
+# Resource:: lookup
 #
 # Author:: George Miranda (<gmiranda@chef.io>)
 # Copyright:: Copyright (c) 2015 Chef Software, Inc.

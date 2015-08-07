@@ -26,4 +26,4 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include_recipe 'chef_portal::fundamentals_3x_webapp'
+include_recipe 'chef_portal::_fundamentals_3x_webapp'

@@ -58,11 +58,11 @@ module ChefHelpers # Helper Module for general purposes
   end
 
   def portal_key
-    node['chef_classroom']['class_name'] + "-portal_key"
+    node['chef_classroom']['class_name'] + '-portal_key'
   end
 
   def workstation_key
-    node['chef_classroom']['class_name'] + "-workstation_key"
+    node['chef_classroom']['class_name'] + '-workstation_key'
   end
 
   def server_size
@@ -237,10 +237,10 @@ module ChefHelpers # Helper Module for general purposes
     name = node['chef_classroom']['class_name']
     usermap = {}
     1.upto(count).each do |i|
-      # do the nodes we want to map exist?
       workstation = search(
         'node', "tags:workstation AND name:#{name}-workstation-#{i}"
-        ).first
+      ).first
+      # search returns an oddly formatted result here, load individual items instead
       node1 = validate_data_bag_item("#{name}-node1-#{i}")
       node2 = validate_data_bag_item("#{name}-node2-#{i}")
       node3 = validate_data_bag_item("#{name}-node3-#{i}")
@@ -249,6 +249,7 @@ module ChefHelpers # Helper Module for general purposes
         'password' => 'chef',
         'machines' => {}
       }
+      # only populate the machines hash with nodes that already exist
       usermap[i]['machines']['workstation'] = workstation unless workstation.nil?
       usermap[i]['machines']['node1'] = node1 unless node1.nil?
       usermap[i]['machines']['node2'] = node2 unless node2.nil?
@@ -261,7 +262,6 @@ module ChefHelpers # Helper Module for general purposes
     node['chef_classroom']['iam_instance_profile'].split('/')[1]
   end
 end
-
 
 Chef::Recipe.send(:include, ChefHelpers)
 Chef::Resource.send(:include, ChefHelpers)

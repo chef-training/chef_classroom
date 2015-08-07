@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: _portal_ssh_key
+# Recipe:: _setup_portal_key
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -31,5 +31,5 @@ with_driver "aws::#{region}"
 
 aws_key_pair portal_key do
   allow_overwrite false
-	private_key_path "#{ENV['HOME']}/.ssh/#{portal_key}"
+  private_key_path "#{ENV['HOME']}/.ssh/#{portal_key}"
 end

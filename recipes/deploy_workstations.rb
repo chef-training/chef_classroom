@@ -30,11 +30,12 @@ require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
 
-# we need this data_bag sooner rather than later
+# we need this data_bag during compile
 chef_data_bag 'class_machines' do
   action :nothing
 end.run_action(:create)
 
+# setup base aws dependencies
 include_recipe 'chef_portal::_refresh_iam_creds'
 include_recipe 'chef_classroom::_setup_portal_key'
 include_recipe 'chef_classroom::_setup_security_groups'

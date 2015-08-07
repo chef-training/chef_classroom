@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Recipe:: portal
+# Recipe:: destroy_lab
 #
 # Author:: Ned Harris (<nharris@chef.io>)
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -26,50 +26,9 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-service 'iptables' do
-  action [:disable, :stop]
-end
-
-package 'httpd'
-
-service 'httpd' do
-  supports :status => true, :restart => true, :reload => true
-  action [:start, :enable]
-end
-
-template '/var/www/html/index.html' do
-  source 'index.html.erb'
-  mode '0644'
-  variables({
-    :workstations => search('node', 'tags:workstation'),
-    :node1s => search('class_machines', 'tags:node1'),
-    :node2s => search('class_machines', 'tags:node2'),
-    :node3s => search('class_machines', 'tags:node3'),
-    :chefserver => search('node', 'tags:chefserver')
-  })
-end
-
-# here's some ugliness.  we need to get the aws ssh private key on the portal
-# node to enable guacamole connections.  but that's okay because once issue #15
-# is resolved, we get this on the portal for free
-template "/root/.ssh/#{ssh_key}" do
-  source 'ssh_key.erb'
-  owner 'root'
-  group 'root'
-  mode '0600'
-end
-
-# lazy create the guacamole user map and monkeypatch it
-# search returns nil during compilation
-include_recipe 'guacamole'
-
-chef_gem 'chef-rewind'
-require 'chef/rewind'
-
-rewind 'template[/etc/guacamole/user-mapping.xml]' do
-  variables(
-    lazy do
-      { :usermap => guacamole_user_map }
-    end
-  )
-end
+include_recipe 'chef_portal::_refresh_iam_creds'
+include_recipe 'chef_classroom::destroy_workstations'
+include_recipe 'chef_classroom::destroy_nodes'
+include_recipe 'chef_classroom::destroy_server'
+include_recipe 'chef_classroom::_destroy_security_groups'
+include_recipe 'chef_classroom::_destroy_portal_key'

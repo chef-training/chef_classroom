@@ -28,7 +28,6 @@
 
 include_recipe 'chef_portal::_refresh_iam_creds'
 include_recipe 'chef_classroom::_setup_security_groups'
-#include_recipe 'chef_classroom::deploy_portal'
 include_recipe 'chef_classroom::deploy_workstations'
 include_recipe 'chef_classroom::deploy_first_nodes'
 include_recipe 'chef_classroom::deploy_server'
