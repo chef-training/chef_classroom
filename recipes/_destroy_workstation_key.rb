@@ -28,7 +28,6 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-name = node['chef_classroom']['class_name']
 
 aws_key_pair workstation_key do
   action :destroy

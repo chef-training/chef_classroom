@@ -40,23 +40,33 @@ To set up a Chef Training Classroom, do the following:
 
 7. You should now have a Classroom Portal set up.  Visit the portal web UI in a browser by hitting the front-end IP.  To find the portal node front-end IP, at this time the best way is to run the command `grep public_ipv4 nodes/mytraining-portal.json`.  There's a gem conflict preventing knife from working in local-mode that should be resolved the next time ChefDK ships.
 
-Visit the portal node in a web browser.  Additional actions [should be taken][WebUIactions] from the portal to run your class.
+Visit the portal node in a web browser.  Additional actions [should be taken][WebUIactions] from the portal to run your class.  These actions are not yet available.  See the Demo workflow below and follow steps 1-3 to get an entire classroom provisioned for training material verification.
 
-Roadmap note: setup steps 1-5 could be handled by shipping a pre-baked Chef Classroom AMI.  See the Roadmap section below for intended usage and next steps.
+Roadmap note: setup steps 1-6 could be handled by shipping a pre-baked Chef Classroom AMI.  See the Roadmap section below for intended usage and next steps.
 
 ## Classroom Workflow Demo
 Only Chef Fundamentals 3.x workflow is currently supported.
 
-Additional actions [from the web UI][WebUIactions] are not yet available.  So to see the instructor experience, you have to run chef-provisioning recipes via the local shell.  The mock buttons in the web UI should do this.  But for now, your steps to see the classroom go are:
+Additional actions [from the web UI][WebUIactions] are not yet available.  So to see the instructor experience, you have to run chef-provisioning recipes via the local shell.  The mock buttons in the web UI should eventually do this.  But for now, your steps to see the classroom go are:
 
-1. SSH to the portal instance. (See AWS Requirements for details)
+1. SSH to the portal instance. (See AWS Requirements for details)  Run the command `cd chef_classroom`.
 
-2. Create the student remote virtual workstations
+2. Presently, you have to set your classroom attributes again once on the portal instance.  On the portal instance, edit `attributes/default.rb` again with all of your desired settings.  Every time you make a local modification to the code in the `chef_classroom` cookbook dir, you must re-vendor cookbooks.  Run the following command: `rm -rf cookbooks/ ; berks vendor cookbooks`.
+
+3. To create the entire classroom in one fell swoop, run the default recipe.
+
+   * `chef-client -z -r 'recipe[chef_classroom]'`
+   * The classroom environment takes about 30-40 mins to build
+   * Check the portal webpage
+
+Alternately, you may instead manage the classroom in steps that match our proposed instructor workflow.
+
+1. Create the student remote virtual workstations
 
    * `chef-client -z -r 'recipe[chef_classroom::deploy_workstations]'`
    * Check the portal page
 
-2. At some appropriate point, remote virtual workstations are abandoned
+2. **Optional**: At some appropriate point, remote virtual workstations are abandoned
 
    * `chef-client -z -r 'recipe[chef_classroom::destroy_workstations]'`
    * Check the portal page
@@ -76,15 +86,39 @@ Additional actions [from the web UI][WebUIactions] are not yet available.  So to
    * `chef-client -z -r 'recipe[chef_classroom::deploy_multi_nodes]'`
    * Check the portal page
 
-6. Class ends and all nodes must be destroyed
+When you are finished with the classroom environment, all nodes must be destroyed (including the portal).
 
-   * `chef-client -z -r 'recipe[chef_classroom::destroy_all]'`
+1. Class ends and all workstations, nodes, and the Chef server must be destroyed
+
+   * From the portal instance, `chef-client -z -r 'recipe[chef_classroom::destroy_lab]'`
    * Check that all nodes are terminated via AWS console
 
-7. Destroy the portal instance from your local workstation
+2. Destroy the portal instance from your local workstation
 
-   * `chef-client -z -r 'recipe[chef_classroom::destroy_portal]'`
+   * From your workstation, `chef-client -z -r 'recipe[chef_classroom::destroy_portal]'`
    * Or if we ship an AMI, this can be done via typical EC2 management methods
+
+## Known issues
+
+  * On occasion, chef-provisioning-aws may lose track of an object it provisioned and you will get errors similar to
+
+    ```
+    Problem: AWS::EC2::Errors::InvalidInstanceID::NotFound
+
+    The instance ID 'i-a1b2c3d4' does not exist
+    ```
+    
+    This transient error has been [difficult to replicate][InvalidID], but should hopefully be fixed in chef-provisioning-aws v.1.4.0.  If this error occurs, run the chef recipe again and it will pick up where you left off.  You will have an unmanaged instance occupying your security group when you attempt to destroy the entire classroom.  So you will see an error specifying your SG's cannot be removed.  You may manually remove the transient instance(s) and try again.  Another option may be to set `action :purge` on the aws_security_group resources that clean everything up.
+
+  * AWS API Rate Limits are in place to throttle instance creation requests as a DDOS prevention technique.  You may see these errors if creating large batches of machines all at once.
+
+    ```
+    AWS::EC2::Errors::RequestLimitExceeded: Request limit exceeded 
+    ```
+
+    These limits may be adjusted for your AWS account by contacting support.  If you see errors indicating you've hit these limits, the best thing to do is get them raised.  Alternately, you may just run the recipe again and it will pick up where it left off.
+
+Other normal EC2 error conditions apply (e.g. account quotas, IAM permissions, etc)
 
 # AWS Setup
 
@@ -136,9 +170,10 @@ Usage note: if you make changes to the `chef_classroom` cookbook, you must `berk
 [IAMroles]:        http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#launch-instance-with-role-console
 [IAMroleconsole]:  http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#create-iam-role-console
 [Marketplace]:     https://aws.amazon.com/marketplace
-[Centos6]:			https://aws.amazon.com/marketplace/pp/B00NQAYLWO/ref=srh_res_product_title?ie=UTF8&sr=0-5&qid=1438798120883
-[Windows2012]:		https://aws.amazon.com/marketplace/pp/B00KQOWEPO/ref=srh_res_product_title?ie=UTF8&sr=0-2&qid=1438798402893
-[ChefServer]:		https://aws.amazon.com/marketplace/pp/B010OMNV2W/ref=srh_res_product_title?ie=UTF8&sr=0-6&qid=1438798452150
-[WebUIactions]:		https://github.com/gmiranda23/chef_classroom/issues/14
-[portal]:			https://github.com/gmiranda23/chef_portal
-[workstation]:		https://github.com/gmiranda23/chef_workstation
+[Centos6]:         https://aws.amazon.com/marketplace/pp/B00NQAYLWO/ref=srh_res_product_title?ie=UTF8&sr=0-5&qid=1438798120883
+[Windows2012]:i    https://aws.amazon.com/marketplace/pp/B00KQOWEPO/ref=srh_res_product_title?ie=UTF8&sr=0-2&qid=1438798402893
+[ChefServer]:i     https://aws.amazon.com/marketplace/pp/B010OMNV2W/ref=srh_res_product_title?ie=UTF8&sr=0-6&qid=1438798452150
+[WebUIactions]:    https://github.com/gmiranda23/chef_classroom/issues/14
+[portal]:          https://github.com/gmiranda23/chef_portal
+[workstation]:     https://github.com/gmiranda23/chef_workstation
+[InvalidID]:       https://github.com/chef/chef-provisioning-aws/issues/264

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef_classroom
-# Provider:: object_lookup
+# Provider:: lookup
 #
 # Author:: George Miranda (<gmiranda@chef.io>)
 # Copyright:: Copyright (c) 2015 Chef Software, Inc.
@@ -39,7 +39,10 @@ action :lookup do
         managed_entry_store: Chef::Provisioning.chef_managed_entry_store(run_context.cheffish.current_chef_server)
       )
       exit(1) if aws_object.public_ip_address.to_s.empty?
-      # only create data_bag_item if there's useable data
+      # exit so that we only create data_bag_item if there's useable data
+      #
+      # the idea with this resource is to mock up something that looks like
+      # an actual node oject for nodes that are not managed by chef
       new_item = Chef::DataBagItem.from_hash({
         'id' => object,
         'name' => object,
