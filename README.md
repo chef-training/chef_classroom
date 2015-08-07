@@ -171,8 +171,8 @@ Usage note: if you make changes to the `chef_classroom` cookbook, you must `berk
 [IAMroleconsole]:  http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#create-iam-role-console
 [Marketplace]:     https://aws.amazon.com/marketplace
 [Centos6]:         https://aws.amazon.com/marketplace/pp/B00NQAYLWO/ref=srh_res_product_title?ie=UTF8&sr=0-5&qid=1438798120883
-[Windows2012]:i    https://aws.amazon.com/marketplace/pp/B00KQOWEPO/ref=srh_res_product_title?ie=UTF8&sr=0-2&qid=1438798402893
-[ChefServer]:i     https://aws.amazon.com/marketplace/pp/B010OMNV2W/ref=srh_res_product_title?ie=UTF8&sr=0-6&qid=1438798452150
+[Windows2012]:     https://aws.amazon.com/marketplace/pp/B00KQOWEPO/ref=srh_res_product_title?ie=UTF8&sr=0-2&qid=1438798402893
+[ChefServer]:      https://aws.amazon.com/marketplace/pp/B010OMNV2W/ref=srh_res_product_title?ie=UTF8&sr=0-6&qid=1438798452150
 [WebUIactions]:    https://github.com/gmiranda23/chef_classroom/issues/14
 [portal]:          https://github.com/gmiranda23/chef_portal
 [workstation]:     https://github.com/gmiranda23/chef_workstation
