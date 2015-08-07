@@ -4,7 +4,7 @@ maintainer_email 'gmiranda@chef.io'
 license 'MIT'
 description 'Installs/Configures chef_classroom'
 long_description 'Installs/Configures chef_classroom'
-version '0.3.0'
+version '0.4.0'
 
 depends 'chef_workstation'
 depends 'guacamole'
