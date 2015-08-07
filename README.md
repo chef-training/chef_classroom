@@ -49,7 +49,7 @@ Only Chef Fundamentals 3.x workflow is currently supported.
 
 Additional actions [from the web UI][WebUIactions] are not yet available.  So to see the instructor experience, you have to run chef-provisioning recipes via the local shell.  The mock buttons in the web UI should eventually do this.  But for now, your steps to see the classroom go are:
 
-1. SSH to the portal instance. (See AWS Requirements for details)  Run the command `cd chef_classroom`.
+1. SSH to the portal instance. (See [AWS Setup](#aws-setup) for details)  Run the command `cd chef_classroom`.
 
 2. Presently, you have to set your classroom attributes again once on the portal instance.  On the portal instance, edit `attributes/default.rb` again with all of your desired settings.  Every time you make a local modification to the code in the `chef_classroom` cookbook dir, you must re-vendor cookbooks.  Run the following command: `rm -rf cookbooks/ ; berks vendor cookbooks`.
 
@@ -107,13 +107,13 @@ When you are finished with the classroom environment, all nodes must be destroye
 
     The instance ID 'i-a1b2c3d4' does not exist
     ```
-    
+
     This transient error has been [difficult to replicate][InvalidID], but should hopefully be fixed in chef-provisioning-aws v.1.4.0.  If this error occurs, run the chef recipe again and it will pick up where you left off.  You will have an unmanaged instance occupying your security group when you attempt to destroy the entire classroom.  So you will see an error specifying your SG's cannot be removed.  You may manually remove the transient instance(s) and try again.  Another option may be to set `action :purge` on the aws_security_group resources that clean everything up.
 
   * AWS API Rate Limits are in place to throttle instance creation requests as a DDOS prevention technique.  You may see these errors if creating large batches of machines all at once.
 
     ```
-    AWS::EC2::Errors::RequestLimitExceeded: Request limit exceeded 
+    AWS::EC2::Errors::RequestLimitExceeded: Request limit exceeded
     ```
 
     These limits may be adjusted for your AWS account by contacting support.  If you see errors indicating you've hit these limits, the best thing to do is get them raised.  Alternately, you may just run the recipe again and it will pick up where it left off.
