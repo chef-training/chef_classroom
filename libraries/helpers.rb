@@ -219,7 +219,8 @@ module ChefHelpers # Helper Module for general purposes
       options[:is_windows] = true
     end
     if group == 'portal'
-      options[:bootstrap_options][:iam_instance_profile] = node['chef_classroom']['iam_instance_profile']
+      # options[:bootstrap_options][:iam_instance_profile] = node['chef_classroom']['iam_instance_profile']
+      options[:bootstrap_options][:iam_instance_profile] = { :arn => node['chef_classroom']['iam_instance_profile'] }
     end
     unless group == 'portal'
       options[:use_private_ip_for_ssh] = true
