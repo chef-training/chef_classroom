@@ -46,3 +46,15 @@ machine "#{name}-portal" do
   recipe 'chef_portal::fundamentals_3x'
   converge true
 end
+
+# TODO: There seems like there is a workstation key
+# TODO: There also seems to be some reason that we have workstation key and portal key
+#        and I think that I am the problem in naming that issue
+key_name = "#{name}-workstation_key"
+
+# Get the newly generated key that we created to the portal machine
+machine_file "/root/.ssh/#{name}-portal_key" do
+  machine "#{name}-portal"
+  local_path "#{ENV['HOME']}/.ssh/#{key_name}"
+  action :upload
+end
