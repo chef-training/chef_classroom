@@ -6,9 +6,9 @@ This cookbook manages the deployment logic for managing instances used in Chef t
 In order to use this repo, you must have the following setup:
 
 #### Chef Requirements
-* Install ChefDK 0.6.2
+* Install ChefDK 0.9.0
 * Update chef-provisioning to 1.2.1
-* Update chef-provisioning-aws to 1.3.0
+* Update chef-provisioning-aws to 1.5.1
 
 #### AWS Requirements
 * [AWS API credentials][APIcreds] to start a classroom portal EC2 instance
@@ -56,7 +56,7 @@ Additional actions [from the web UI][WebUIactions] are not yet available.  So to
     [root@PORTAL_ADDRESS]# cd chef_classroom
     ```
 
-2. Presently, you have to set your classroom attributes once again on the portal instance.  **Ensure you set the same ARN name as you used to provision the portal instance.  Again, set all of your desired classroom settings here.** 
+2. Presently, you have to set your classroom attributes once again on the portal instance.  **Ensure you set the same ARN name as you used to provision the portal instance.  Again, set all of your desired classroom settings here.**
 Every time you make a local modification to the code in the `chef_classroom` cookbook dir, you must re-vendor cookbooks.  (TODO: fix this duplicate step)
 
      ```
