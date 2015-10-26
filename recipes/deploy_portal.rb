@@ -43,8 +43,15 @@ end
 
 machine "#{name}-portal" do
   machine_options create_machine_options(region, 'centos', portal_size, workstation_key, 'portal')
+  role   'class'
   recipe 'chef_portal::fundamentals_3x'
   converge true
+end
+
+machine_file "/root/chef_classroom/roles/class.json" do
+  machine "#{name}-portal"
+  local_path "../../../roles/class.json"
+  action :upload
 end
 
 # TODO: There seems like there is a workstation key
