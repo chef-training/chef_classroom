@@ -28,20 +28,25 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-name = node['chef_classroom']['class_name']
+class_name = node['chef_classroom']['class_name']
+student = node['chef_classroom']['student_prefix']
 
 include_recipe 'chef_portal::_refresh_iam_creds'
 
 machine_batch do
   action :allocate
   1.upto(count) do |i|
-    machine "#{name}-node2-#{i}" do
+    machine "#{student}-#{i}-node-2" do
       machine_options create_machine_options(region, 'amzn', node_size, portal_key, 'nodes')
-      tag 'node2'
+      tag 'node-2'
+      tag "#{student}-#{i}"
+      tag class_name
     end
-    machine "#{name}-node3-#{i}" do
+    machine "#{student}-#{i}-node-3" do
       machine_options create_machine_options(region, 'windows', node_size, portal_key, 'nodes')
-      tag 'node3'
+      tag 'node-3'
+      tag "#{student}-#{i}"
+      tag class_name
     end
   end
 end
@@ -50,14 +55,18 @@ end
 chef_data_bag 'class_machines'
 
 1.upto(count) do |i|
-  chef_classroom_lookup "#{name}-node2-#{i}" do
+  chef_classroom_lookup "#{student}-#{i}-node-2" do
     tag 'node2'
-    platform 'rhel'
+    tag "#{student}-#{i}"
+    tag class_name
+    platform 'centos'
     guac_user 'ec2-user'
     guac_key "/root/.ssh/#{portal_key}"
   end
-  chef_classroom_lookup "#{name}-node3-#{i}" do
+  chef_classroom_lookup "#{student}-#{i}-node-3" do
     tag 'node3'
+    tag "#{student}-#{i}"
+    tag class_name
     platform 'windows'
     guac_user 'Administrator'
     guac_pass 'gets_polled_automatically'

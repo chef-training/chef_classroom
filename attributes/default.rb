@@ -4,6 +4,7 @@
 # 2 additional nodes when multi-node is taught (1 centos, 1 windows)
 default['chef_classroom']['class_name'] = 'mytraining'
 default['chef_classroom']['number_of_students'] = 2
+default['chef_classroom']['student_prefix'] = 'student'
 default['chef_classroom']['ip_range'] = '0.0.0.0/0'
 
 # regional aws settings
