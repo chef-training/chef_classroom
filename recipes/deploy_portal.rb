@@ -50,7 +50,7 @@ end
 
 machine_file "/root/chef_classroom/roles/class.json" do
   machine "#{name}-portal"
-  local_path "../../../roles/class.json"
+  local_path default['chef_classroom']['role_json']
   action :upload
 end
 

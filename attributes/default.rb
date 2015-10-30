@@ -10,6 +10,8 @@ default['chef_classroom']['ip_range'] = '0.0.0.0/0'
 # regional aws settings
 default['chef_classroom']['region'] = 'us-east-1'
 default['chef_classroom']['iam_instance_profile'] = 'arn:aws:iam::567812349012:instance-profile/provisioner'
+default['chef_classroom']['role_json'] = "roles/class.json"
+default['chef_classroom']['chef_version'] = '12.5.1'
 
 # tweak workstation_type (only current option is linux -- roadmap: add windows)
 default['chef_classroom']['workstation_type'] = 'linux'
