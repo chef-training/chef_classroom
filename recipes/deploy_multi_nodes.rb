@@ -38,11 +38,11 @@ machine_batch do
   1.upto(count) do |i|
     machine "#{student}-#{i}-node-2" do
       machine_options create_machine_options(region, 'amzn', node_size, portal_key, 'nodes')
-        tags ['node-2', "#{student}-#{i}", class_name ]
+      tags ['node-2', "#{student}-#{i}", class_name ]
     end
     machine "#{student}-#{i}-node-3" do
       machine_options create_machine_options(region, 'windows', node_size, portal_key, 'nodes')
-        tags ['node-3', "#{student}-#{i}", class_name ]
+      tags ['node-3', "#{student}-#{i}", class_name ]
     end
   end
 end
