@@ -52,11 +52,11 @@ action :lookup do
           'public_ipv4' => aws_object.public_ip_address,
           'private_ipv4' => aws_object.private_ip_address
         },
-        'platform_family' => new_resource.platform,
+        'platform' => new_resource.platform,
         'guacamole_user' => new_resource.guac_user,
         'guacamole_pass' => new_resource.guac_pass,
         'guacamole_key' => new_resource.guac_key,
-        'tags' => new_resource.tag
+        'tags' => new_resource.tags
       })
       new_item.data_bag('class_machines')
       new_item.save

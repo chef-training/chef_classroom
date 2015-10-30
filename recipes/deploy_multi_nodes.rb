@@ -38,15 +38,11 @@ machine_batch do
   1.upto(count) do |i|
     machine "#{student}-#{i}-node-2" do
       machine_options create_machine_options(region, 'amzn', node_size, portal_key, 'nodes')
-      tag 'node-2'
-      tag "#{student}-#{i}"
-      tag class_name
+      tags ['node-2', "#{student}-#{i}", class_name ]
     end
     machine "#{student}-#{i}-node-3" do
       machine_options create_machine_options(region, 'windows', node_size, portal_key, 'nodes')
-      tag 'node-3'
-      tag "#{student}-#{i}"
-      tag class_name
+      tags ['node-3', "#{student}-#{i}", class_name ]
     end
   end
 end
@@ -56,22 +52,17 @@ chef_data_bag 'class_machines'
 
 1.upto(count) do |i|
   chef_classroom_lookup "#{student}-#{i}-node-2" do
-    tag 'node2'
-    tag "#{student}-#{i}"
-    tag class_name
-    platform 'centos'
+    tags [ 'node-2', "#{student}-#{i}", class_name ]
+    platform 'amazon'
     guac_user 'ec2-user'
     guac_key "/root/.ssh/#{portal_key}"
   end
   chef_classroom_lookup "#{student}-#{i}-node-3" do
-    tag 'node3'
-    tag "#{student}-#{i}"
-    tag class_name
+    tags [ 'node-3', "#{student}-#{i}", class_name ]
     platform 'windows'
     guac_user 'Administrator'
     guac_pass 'gets_polled_automatically'
   end
 end
-#
 
 include_recipe 'chef_classroom::_refresh_portal'

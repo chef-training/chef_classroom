@@ -45,13 +45,20 @@ machine_batch do
   1.upto(count) do |i|
     machine "#{student}-#{i}-workstation" do
       machine_options create_machine_options(region, 'amzn', workstation_size, portal_key, 'nodes')
-      tag 'workstation'
-      tag "#{student}-#{i}"
-      tag class_name
+      tags [ 'workstation', "#{student}-#{i}", class_name ]
       recipe 'chef_workstation::full_stack'
       attribute 'guacamole_user', 'chef'
       attribute 'guacamole_pass', 'chef'
     end
+  end
+end
+
+chef_data_bag 'class_machines'
+
+1.upto(count) do |i|
+  chef_classroom_lookup "#{student}-#{i}-workstation" do
+    tags [ 'workstation', "#{student}-#{i}", class_name ]
+    platform 'amazon'
   end
 end
 

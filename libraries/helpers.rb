@@ -206,7 +206,7 @@ module ChefHelpers # Helper Module for general purposes
       :ssh_username => lookup_ami_user(type),
       :convergence_options => {
         :ssl_verify_mode => :verify_none,
-        :chef_version => '12.2.1'
+        :chef_version => node['chef_classroom']['chef_version']
       },
       :bootstrap_options => {
         :instance_type => size,
@@ -234,18 +234,19 @@ module ChefHelpers # Helper Module for general purposes
   end
 
   def guacamole_user_map
-    name = node['chef_classroom']['class_name']
+    student = node['chef_classroom']['student_prefix']
+
     usermap = {}
     1.upto(count).each do |i|
       workstation = search(
-        'node', "tags:workstation AND name:#{name}-workstation-#{i}"
+        'node', "tags:workstation AND name:#{student}-#{i}-workstation"
       ).first
       # search returns an oddly formatted result here, load individual items instead
-      node1 = validate_data_bag_item("#{name}-node1-#{i}")
-      node2 = validate_data_bag_item("#{name}-node2-#{i}")
-      node3 = validate_data_bag_item("#{name}-node3-#{i}")
+      node1 = validate_data_bag_item("#{student}-#{i}-node-1")
+      node2 = validate_data_bag_item("#{student}-#{i}-node-2")
+      node3 = validate_data_bag_item("#{student}-#{i}-node-3")
       usermap[i] = {
-        'name' => "student#{i}",
+        'name' => "#{student}-#{i}",
         'password' => 'chef',
         'machines' => {}
       }
