@@ -30,15 +30,34 @@ To set up a Chef Training Classroom, do the following:
     aws_access_key_id = AKIAAABBCCDDEEFFGGHH
     aws_secret_access_key = "Abc0123dEf4GhIjk5lMn/OpQrSTUvXyz/A678bCD"
     ```
-2. Set the ARN name of your IAM Instance Profile in `attributes/default.rb` as the value of `chef_classroom['iam_instance_profile']`.
 
-3. Additional options may be set, including automatic localization via the `chef_classroom['region']` attribute (note: so far only AWS US regions available).  Instructors are ***strongly encouraged*** to replace the value of `chef_classroom['ip_range']` with an appropriate IP address range (e.g. "184.106.28.82/32") for any classroom being managed.  The permissions and security settings of these instances are... lax.  However, none of these changes are required for basic (demo) use of this repo.
+2. Create a new role called `class.json` in 'roles' folder
 
-5. Run `berks vendor cookbooks`
+```
+# cat roles/class.json
+{
+   "name" : "class",
+   "default_attributes" : {
+      "chef_classroom" : {
+         "region" : "us-west-2",
+         "iam_instance_profile" : "arn:aws:iam::643494220119:instance-profile/chef-portal",
+         "number_of_students" : 1,
+         "ip_range" : "0.0.0.0/0",
+         "class_name" : "CLASS_NAME"
+      }
+   }
+}
+```
 
-6. Run `chef-client -z -r 'recipe[chef_classroom::deploy_portal]'`
+3. Replace the IAM Instance Profile with the ARN name of your choice.
 
-7. You should now have a Classroom Portal set up.  Visit the portal web UI in a browser by hitting the front-end IP.  To find the portal node front-end IP, at this time the best way is to run the command `grep public_ipv4 nodes/mytraining-portal.json`.  There's a gem conflict preventing knife from working in local-mode that should be resolved the next time ChefDK ships.
+4. Additional attributes may be set in the `class` role, including automatic localization via the `chef_classroom['region']` attribute (note: so far only AWS US regions available).  Instructors are ***strongly encouraged*** to replace the value of `chef_classroom['ip_range']` with an appropriate IP address range (e.g. "184.106.28.82/32") for any classroom being managed.  The permissions and security settings of these instances are... lax.  However, none of these changes are required for basic (demo) use of this repo.
+
+6. Run `berks vendor cookbooks`
+
+7. Run `chef-client -z -r 'chef-client -z -r "role[class],recipe[chef_classroom::deploy_portal]'`
+
+8. You should now have a Classroom Portal set up.  Visit the portal web UI in a browser by hitting the front-end IP.  To find the portal node front-end IP, at this time the best way is to run the command `grep public_ipv4 nodes/mytraining-portal.json`.  There's a gem conflict preventing knife from working in local-mode that should be resolved the next time ChefDK ships.
 
 Visit the portal node in a web browser.  Additional actions [should be taken][WebUIactions] from the portal to run your class.  These actions are not yet available.  See the Demo workflow below and follow steps 1-3 to get an entire classroom provisioned for training material verification.
 
