@@ -29,14 +29,15 @@
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 name = node['chef_classroom']['class_name']
+student = node['chef_classroom']['student_prefix']
 
 include_recipe 'chef_portal::_refresh_iam_creds'
 
 machine_batch do
   action :destroy
-  machines 1.upto(count).map { |i| "#{name}-node1-#{i}" }
-  machines 1.upto(count).map { |i| "#{name}-node2-#{i}" }
-  machines 1.upto(count).map { |i| "#{name}-node3-#{i}" }
+  machines 1.upto(count).map { |i| "#{student}-#{i}-node-1" }
+  machines 1.upto(count).map { |i| "#{student}-#{i}-node-2" }
+  machines 1.upto(count).map { |i| "#{student}-#{i}-node-3" }
 end
 
 chef_data_bag 'class_machines' do
