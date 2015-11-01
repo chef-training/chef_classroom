@@ -36,7 +36,7 @@ key_name = "#{class_name}-workstation_key"
 
 # Get the newly generated key that we created to the portal machine
 machine_file "/root/.ssh/#{class_name}-portal_key" do
-  machine "#{name}-portal"
+  machine "#{class_name}-portal"
   local_path "#{ENV['HOME']}/.ssh/#{key_name}"
   action :upload
 end
