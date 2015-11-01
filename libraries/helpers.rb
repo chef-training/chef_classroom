@@ -60,7 +60,7 @@ module ChefHelpers # Helper Module for general purposes
       when 'windows'
         'ami-f70cdd9c'
       when 'marketplace'
-        'ami-0d2ce366'
+        'ami-6b305b0e'
       end
 
     when 'us-west-1'
@@ -72,7 +72,7 @@ module ChefHelpers # Helper Module for general purposes
       when 'windows'
         'ami-c751a283'
       when 'marketplace'
-        'ami-3509f971'
+        'ami-f38346b7'
       end
 
     when 'us-west-2'
@@ -84,7 +84,7 @@ module ChefHelpers # Helper Module for general purposes
       when 'windows'
         'ami-5b57556b'
       when 'marketplace'
-        'ami-0b42423b'
+        'ami-711e0241'
       end
     #
     # when 'eu-west-1'
