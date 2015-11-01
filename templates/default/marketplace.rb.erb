@@ -1,0 +1,45 @@
+# Enable or disable changing the motd
+motd['enable'] = true
+
+# Marketplace specific support email address
+support['email'] = 'some@email.com'
+
+# Marketplace specific documentation
+documentation['url'] = 'http://myorg.com/docs'
+
+# Which role the instance is supposed to play
+role 'aio' # or 'server'
+
+# Which Cloud Platform the instance is running on
+platform 'aws'
+
+# Default user for cloud-init
+user 'ec2-user'
+
+# Prevents commands from attempting to use external services like package mirrors
+# Changing this setting will disable certain features
+disable_outboud_traffic true
+
+# If the instance is going to be bundled/published into the cloud marketplace
+# this option will run will enable security recipe to make sure we don't leave
+# around sensitive data.
+publishing['enabled'] = true
+
+# Configure which port the Analytics UI binds to
+analytics['ssl_port'] = 8443
+
+# Enable or disable the actions auto trim
+analytics['trimmer']['enabled'] = true
+
+# How often in hours to run (1-23)
+analytics['trimmer']['interval'] = 4
+
+# Enable or disable the reporting auto clean-up
+reporting['cron']['enabled'] = true
+
+# Standard crontab expression
+reporting['cron']['expression'] = '*/2 * * * *'
+
+# The latest year/month in the reporting database that you want to preserve
+reporting['cron']['year'] = 'date +%Y'
+reporting['cron']['month'] = 'date +%m'

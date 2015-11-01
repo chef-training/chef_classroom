@@ -3,20 +3,20 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-name = node['chef_classroom']['class_name']
+class_name = node['chef_classroom']['class_name']
 
 # the portal will need this data_bag during the initial setup run
 chef_data_bag 'class_machines'
 
 include_recipe 'chef_classroom::_setup_workstation_key'
 
-aws_security_group "training-#{name}-portal" do
+aws_security_group "training-#{class_name}-portal" do
   action :create
   ignore_failure true
   inbound_rules class_source_addr => [22, 80, 8080]
 end
 
-machine "#{name}-portal" do
+machine "#{class_name}-portal" do
   machine_options create_machine_options(region, 'centos', portal_size, workstation_key, 'portal')
   role   'class'
   recipe 'chef_portal::fundamentals_3x'
@@ -24,7 +24,7 @@ machine "#{name}-portal" do
 end
 
 machine_file "/root/chef_classroom/roles/class.json" do
-  machine "#{name}-portal"
+  machine "#{class_name}-portal"
   local_path node['chef_classroom']['role_json']
   action :upload
 end
@@ -32,10 +32,10 @@ end
 # TODO: There seems like there is a workstation key
 # TODO: There also seems to be some reason that we have workstation key and portal key
 #        and I think that I am the problem in naming that issue
-key_name = "#{name}-workstation_key"
+key_name = "#{class_name}-workstation_key"
 
 # Get the newly generated key that we created to the portal machine
-machine_file "/root/.ssh/#{name}-portal_key" do
+machine_file "/root/.ssh/#{class_name}-portal_key" do
   machine "#{name}-portal"
   local_path "#{ENV['HOME']}/.ssh/#{key_name}"
   action :upload

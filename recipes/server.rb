@@ -1,14 +1,6 @@
 # Cookbook Name:: chef_classroom
 # Recipe:: server
 
-execute 'chef-server-ctl install opscode-manage' do
-  creates '/etc/yum.repos.d/chef-stable.repo'
-end
-
-%w(opscode-manage opscode).each do |dir|
-  directory dir
-end
-
 template '/etc/opscode-manage/manage.rb' do
   source 'manage.rb.erb'
 end
@@ -17,10 +9,18 @@ template '/etc/opscode/chef-server.rb' do
   source 'chef-server.rb.erb'
 end
 
-execute 'chef-server-ctl reconfigure' do
-  creates '/etc/opscode/pivotal.pem'
+template '/etc/chef-marketplace/marketplace.rb' do
+  source 'marketplace.rb.erb'
 end
 
-execute 'opscode-manage-ctl reconfigure' do
-  creates '/etc/opscode-manage/secrets.rb'
-end
+# TODO: for now do this manually still, will fix up and add attributes later
+# bash 'setup marketplace' do
+# code <<-EOH
+#   chef-marketplace-ctl setup -y \
+#   -u serveradmin -p PASS \
+#   -f Class -l Trainer -e trainer@chef.io \
+#   -o chef-training
+#   EOH
+# end
+
+execute 'chef-marketplace-ctl reconfigure'
