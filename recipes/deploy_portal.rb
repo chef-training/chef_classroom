@@ -3,7 +3,6 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-class_name = node['chef_classroom']['class_name']
 
 # the portal will need this data_bag during the initial setup run
 chef_data_bag 'class_machines'

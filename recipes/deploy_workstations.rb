@@ -3,8 +3,6 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-class_name = node['chef_classroom']['class_name']
-student = node['chef_classroom']['student_prefix']
 
 # we need this data_bag during compile
 chef_data_bag 'class_machines' do

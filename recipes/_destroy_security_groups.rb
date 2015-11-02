@@ -4,10 +4,8 @@
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
 
-name = node['chef_classroom']['class_name']
-
 %w(chef_server nodes workstations).each do |secgroup|
-  aws_security_group "training-#{name}-#{secgroup}" do
+  aws_security_group "training-#{class_name}-#{secgroup}" do
     action :destroy
   end
 end

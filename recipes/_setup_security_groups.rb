@@ -3,9 +3,8 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-name = node['chef_classroom']['class_name']
 
-aws_security_group "training-#{name}-workstations" do
+aws_security_group "training-#{class_name}-workstations" do
   action :create
   ignore_failure true
   inbound_rules class_source_addr         => [22],
@@ -14,7 +13,7 @@ aws_security_group "training-#{name}-workstations" do
                 node['ec2']['local_ipv4'] => [22]   if type == 'windows'
 end
 
-aws_security_group "training-#{name}-nodes" do
+aws_security_group "training-#{class_name}-nodes" do
   action :create
   ignore_failure true
   inbound_rules "training-#{name}-workstations" => [22, 5985, 5986],
@@ -22,10 +21,10 @@ aws_security_group "training-#{name}-nodes" do
                 class_source_addr               => [22, 3389, 5985, 5986]
 end
 
-aws_security_group "training-#{name}-chef_server" do
+aws_security_group "training-#{class_name}-chef_server" do
   action :create
   ignore_failure true
   inbound_rules class_source_addr         => [80, 443],
-                "training-#{name}-nodes"  => [443],
+                "training-#{class_name}-nodes"  => [443],
                 node['ec2']['local_ipv4'] => [22]
 end

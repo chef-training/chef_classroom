@@ -3,7 +3,6 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-class_name = node['chef_classroom']['class_name']
 
 include_recipe 'chef_portal::_refresh_iam_creds'
 
@@ -15,11 +14,9 @@ end
 
 chef_data_bag 'class_machines'
 
-1.upto(count) do |i|
-  chef_classroom_lookup "#{class_name}-chefserver" do
-    tags [ 'chefserver', class_name ]
-    platform 'amazon'
-  end
+chef_classroom_lookup "#{class_name}-chefserver" do
+  tags [ 'chefserver', class_name ]
+  platform 'amazon'
 end
 
 include_recipe 'chef_classroom::_refresh_portal'

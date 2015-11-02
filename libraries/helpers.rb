@@ -2,12 +2,15 @@
 # Library:: helper
 
 module ChefHelpers # Helper Module for general purposes
-  #
-  # an odd recursive lookup bug prevents this one from being a good idea
-  # def name
-  #   node['chef_classroom']['class_name']
-  # end
-  #
+
+  def class_name
+    node['chef_classroom']['class_name']
+  end
+
+  def student
+    node['chef_classroom']['student_prefix']
+  end
+  
   def count
     node['chef_classroom']['number_of_students']
   end
