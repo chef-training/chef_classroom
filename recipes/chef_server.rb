@@ -1,7 +1,7 @@
 # Cookbook Name:: chef_classroom
 # Recipe:: chef_server
 
-chef_server = node['chef_classroom']['chef_chef_server']
+chef_server = node['chef_classroom']['chef_server']
 
 bash 'Setup Marketplace Chef Server' do
 code <<-EOH
