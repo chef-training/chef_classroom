@@ -1,5 +1,5 @@
 # Cookbook Name:: chef_classroom
-# Recipe:: destroy_server
+# Recipe:: destroy_chef_server
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"

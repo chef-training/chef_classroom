@@ -3,8 +3,6 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-name = node['chef_classroom']['class_name']
-student = node['chef_classroom']['student_prefix']
 
 include_recipe 'chef_portal::_refresh_iam_creds'
 

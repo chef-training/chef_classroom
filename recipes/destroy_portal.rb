@@ -3,13 +3,12 @@
 
 require 'chef/provisioning/aws_driver'
 with_driver "aws::#{region}"
-name = node['chef_classroom']['class_name']
 
-machine "#{name}-portal" do
+machine "#{class_name}-portal" do
   action :destroy
 end
 
-aws_security_group "training-#{name}-portal" do
+aws_security_group "training-#{class_name}-portal" do
   action :destroy
 end
 
