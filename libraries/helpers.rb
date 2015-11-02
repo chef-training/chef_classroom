@@ -85,7 +85,7 @@ module ChefHelpers # Helper Module for general purposes
       when 'centos'
         'ami-81d092b1'
       when 'windows'
-        'ami-5b57556b'
+        'ami-b48e6a87'
       when 'marketplace'
         'ami-711e0241'
       end
