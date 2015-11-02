@@ -10,7 +10,7 @@ module ChefHelpers # Helper Module for general purposes
   def student
     node['chef_classroom']['student_prefix']
   end
-  
+
   def count
     node['chef_classroom']['number_of_students']
   end
@@ -190,7 +190,7 @@ module ChefHelpers # Helper Module for general purposes
         :instance_type => size,
         :image_id => lookup_region_ami(region, type),
         :key_name => ssh_key,
-        :security_group_ids => "training-#{node['chef_classroom']['class_name']}-#{group}"
+        :security_group_ids => "training-#{class_name}-#{group}"
       }
     }
     if type == 'windows'
@@ -212,7 +212,6 @@ module ChefHelpers # Helper Module for general purposes
   end
 
   def guacamole_user_map
-    student = node['chef_classroom']['student_prefix']
 
     usermap = {}
     1.upto(count).each do |i|

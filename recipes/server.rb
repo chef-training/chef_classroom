@@ -1,26 +1,16 @@
 # Cookbook Name:: chef_classroom
 # Recipe:: server
 
-template '/etc/opscode-manage/manage.rb' do
-  source 'manage.rb.erb'
+server = node['chef_classroom']['chef_server']
+
+bash 'Setup Marketplace Chef Server' do
+code <<-EOH
+  chef-marketplace-ctl setup -y \
+  --username #{server[:admin_user]} \
+  --password #{server[:admin_pass]} \
+  --firstname #{server[:first_name]} \
+  --lastname #{server[:last_name]} \
+  --email #{server[:e_mail]} \
+  --org #{server[:default_org]}
+  EOH
 end
-
-template '/etc/opscode/chef-server.rb' do
-  source 'chef-server.rb.erb'
-end
-
-template '/etc/chef-marketplace/marketplace.rb' do
-  source 'marketplace.rb.erb'
-end
-
-# TODO: for now do this manually still, will fix up and add attributes later
-# bash 'setup marketplace' do
-# code <<-EOH
-#   chef-marketplace-ctl setup -y \
-#   -u serveradmin -p PASS \
-#   -f Class -l Trainer -e trainer@chef.io \
-#   -o chef-training
-#   EOH
-# end
-
-execute 'chef-marketplace-ctl reconfigure'

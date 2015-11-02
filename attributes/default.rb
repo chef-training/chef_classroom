@@ -7,6 +7,15 @@ default['chef_classroom']['number_of_students'] = 2
 default['chef_classroom']['student_prefix'] = 'student'
 default['chef_classroom']['ip_range'] = '0.0.0.0/0'
 
+default['chef_classroom']['chef_server'].tap do |chef|
+  chef['admin_user'] = 'instructor'
+  chef['admin_pass'] = 'instructor_pass'
+  chef['first_name'] = 'Chef'
+  chef['last_name'] = 'Instructor'
+  chef['e_mail'] = 'training-chef@chef.io'
+  chef['default_org'] = 'chef-training'
+end
+
 # regional aws settings
 default['chef_classroom']['region'] = 'us-east-1'
 default['chef_classroom']['iam_instance_profile'] = 'arn:aws:iam::567812349012:instance-profile/provisioner'
