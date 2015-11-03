@@ -10,7 +10,7 @@ machine_batch do
   action :allocate
   1.upto(count) do |i|
     machine "#{student}-#{i}-node-1" do
-      machine_options create_machine_options(region, 'amzn', node_size, portal_key, 'nodes')
+      machine_options create_machine_options(region, 'amzn', node_size('linux'), portal_key, 'nodes')
       tags [ 'node-1', "#{student}-#{i}", class_name ]
     end
   end

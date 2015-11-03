@@ -23,8 +23,13 @@ module ChefHelpers # Helper Module for general purposes
     node['chef_classroom']['ip_range']
   end
 
-  def node_size
-    node['chef_classroom']['node_size']
+  def node_size(platform)
+    case platform
+    when 'linux'
+      node['chef_classroom']['linux']['node_size']
+    when 'windows'
+      node['chef_classroom']['windows']['node_size']
+    end
   end
 
   def portal_size
@@ -39,16 +44,17 @@ module ChefHelpers # Helper Module for general purposes
     node['chef_classroom']['class_name'] + '-portal_key'
   end
 
-  def workstation_key
-    node['chef_classroom']['class_name'] + '-workstation_key'
-  end
-
   def server_size
     node['chef_classroom']['chef_server_size']
   end
 
   def workstation_size
-    node['chef_classroom']['workstation_size']
+    case type
+    when 'linux'
+      node['chef_classroom']['linux']['workstation_size']
+    when 'windows'
+      node['chef_classroom']['windows']['workstation_size']
+    end
   end
 
   def lookup_region_ami(region, type)

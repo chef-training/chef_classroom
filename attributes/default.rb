@@ -26,7 +26,11 @@ default['chef_classroom']['chef_version'] = '12.5.1'
 default['chef_classroom']['workstation_type'] = 'linux'
 
 # tweak instance sizes
-default['chef_classroom']['workstation_size'] = 't2.medium'
-default['chef_classroom']['node_size'] = 't2.micro'
+default['chef_classroom']['linux']['workstation_size'] = 't2.medium'
+default['chef_classroom']['linux']['node_size'] = 't2.micro'
+
+default['chef_classroom']['windows']['workstation_size'] = 'c4.large'
+default['chef_classroom']['windows']['windows'] = 'm3.medium'
+
 default['chef_classroom']['portal_size'] = 'm3.medium'
 default['chef_classroom']['chef_server_size'] = 'm3.medium'
