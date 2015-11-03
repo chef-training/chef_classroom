@@ -71,7 +71,7 @@ Additional actions [from the web UI][WebUIactions] are not yet available.  So to
 1. SSH to the portal instance and cd into the chef_classroom dir (See [AWS Setup](#aws-setup) for details).
 
     ```
-    ssh root@PORTAL_ADDRESS -i ~/.ssh/CLASSNAME-workstation_key
+    ssh root@PORTAL_ADDRESS -i ~/.ssh/CLASSNAME-portal_key
     [root@PORTAL_ADDRESS]# cd chef_classroom
     ```
 
@@ -155,10 +155,10 @@ Other normal EC2 error conditions apply (e.g. account quotas, IAM permissions, e
 # AWS Setup
 
 ## Instance Access
-If you started this environment from a workstation using chef-provisioning, you now have a new ssh key called "#{name}-workstation_key", where `name` is the name of the classroom you set.  If you used defaults, it is located in `~/.ssh/mytraining-workstation_key`.  To reach your workstation, run the following command from a terminal.
+If you started this environment from a workstation using chef-provisioning, you now have a new ssh key called "#{name}-portal_key", where `name` is the name of the classroom you set.  If you used defaults, it is located in `~/.ssh/mytraining-portal_key`.  To reach your workstation, run the following command from a terminal.
 
   ```
-  ssh -i ~/.ssh/CLASSNAME-workstation_key -l root <ip of your instance>
+  ssh -i ~/.ssh/CLASSNAME-portal_key -l root <ip of your instance>
 
   ```
 By default, the [chef_portal][portal] cookbook sets up password auth on the portal instance.  Alternatively, you may SSH in to the portal instance as the portal user using the portal password from that cookbook.

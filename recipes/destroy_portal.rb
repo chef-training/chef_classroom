@@ -12,4 +12,4 @@ aws_security_group "training-#{class_name}-portal" do
   action :destroy
 end
 
-include_recipe 'chef_classroom::_destroy_workstation_key'
+include_recipe 'chef_classroom::_destroy_portal_key'
