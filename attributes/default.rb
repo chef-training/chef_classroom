@@ -30,7 +30,7 @@ default['chef_classroom']['linux']['workstation_size'] = 't2.medium'
 default['chef_classroom']['linux']['node_size'] = 't2.micro'
 
 default['chef_classroom']['windows']['workstation_size'] = 'c4.large'
-default['chef_classroom']['windows']['windows'] = 'm3.medium'
+default['chef_classroom']['windows']['node_size'] = 'm3.medium'
 
 default['chef_classroom']['portal_size'] = 'm3.medium'
 default['chef_classroom']['chef_server_size'] = 'm3.medium'
