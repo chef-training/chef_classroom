@@ -16,9 +16,9 @@ end
 aws_security_group "training-#{class_name}-nodes" do
   action :create
   ignore_failure true
-  inbound_rules "training-#{class_name}-workstations" => [22, 5985, 5986],
-                node['ec2']['local_ipv4']       => [22, 3389, 5985, 5986],
-                class_source_addr               => [22, 3389, 5985, 5986]
+  inbound_rules "training-#{class_name}-workstations" => [22, 80, 8080, 5985, 5986],
+                node['ec2']['local_ipv4']       => [22, 80, 8080, 3389, 5985, 5986],
+                class_source_addr               => [22, 80, 8080, 3389, 5985, 5986]
 end
 
 aws_security_group "training-#{class_name}-chef_server" do
