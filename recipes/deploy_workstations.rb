@@ -17,7 +17,7 @@ include_recipe 'chef_classroom::_setup_security_groups'
 machine_batch do
   1.upto(count) do |i|
     machine "#{student}-#{i}-workstation" do
-      machine_options create_machine_options(region, 'amzn', workstation_size, portal_key, 'nodes')
+      machine_options create_machine_options(region, 'amzn', workstation_size, portal_key, 'workstations')
       tags [ 'workstation', "#{student}-#{i}", class_name ]
       recipe 'chef_workstation::full_stack'
       attribute 'guacamole_user', 'chef'
