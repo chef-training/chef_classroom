@@ -14,7 +14,7 @@ machine_batch do
       tags ['node-2', "#{student}-#{i}", class_name ]
     end
     machine "#{student}-#{i}-node-3" do
-      machine_options create_machine_options(region, 'windows', node_size('windows'), portal_key, 'nodes')
+      machine_options create_machine_options(region, 'amzn', node_size('linux'), portal_key, 'nodes')
       tags ['node-3', "#{student}-#{i}", class_name ]
     end
   end
@@ -32,9 +32,9 @@ chef_data_bag 'class_machines'
   end
   chef_classroom_lookup "#{student}-#{i}-node-3" do
     tags [ 'node-3', "#{student}-#{i}", class_name ]
-    platform 'windows'
-    guac_user 'Administrator'
-    guac_pass 'gets_polled_automatically'
+    platform 'amazon'
+    guac_user 'ec2-user'
+    guac_key "/root/.ssh/#{portal_key}"
   end
 end
 
