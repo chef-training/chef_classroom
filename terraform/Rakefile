@@ -1,0 +1,46 @@
+require 'erb'
+
+def render_template(template, output, scope)
+    tmpl = File.read(template)
+    erb = ERB.new(tmpl, 0, "<>")
+    File.open(output, "w") do |f|
+        f.puts erb.result(scope)
+    end
+end
+
+desc "Create the first nodes tf"
+task :first_nodes, [:students] do |task, args|
+   students = args[:students].to_i
+   render_template("classroom-first-nodes.tf.erb", "classroom-first-nodes.tf", binding)
+   puts "Rendered first nodes template"
+end
+
+desc "Create the secondary nodes tf"
+task :secondary_nodes, [:students] do |task, args|
+   students = args[:students].to_i
+   render_template("classroom-secondary-nodes.tf.erb", "classroom-secondary-nodes.tf", binding)
+   puts "Rendered secondary nodes template"
+end
+
+desc "Create the workstations tf"
+task :workstations, [:students] do |task, args|
+   students = args[:students].to_i
+   render_template("classroom-workstations.tf.erb", "classroom-workstations.tf", binding)
+   puts "Rendered workstation template"
+end
+
+desc "Create all tf"
+task :all, [:students] do |task, args|
+   students = args[:students].to_i
+   render_template("classroom-first-nodes.tf.erb", "classroom-first-nodes.tf", binding)
+   render_template("classroom-secondary-nodes.tf.erb", "classroom-secondary-nodes.tf", binding)
+   render_template("classroom-workstations.tf.erb", "classroom-workstations.tf", binding)
+end
+
+namespace :deploy do
+  desc "Deploy Classroom"
+  task :classroom , [:students] => [:first_nodes, :secondary_nodes, :workstations] do |task, args|
+    puts "Here is where we would terraform:"
+    puts "terraform apply"
+  end
+end

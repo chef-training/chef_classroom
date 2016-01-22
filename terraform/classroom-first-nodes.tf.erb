@@ -1,0 +1,18 @@
+<% (1..students).each do |i| %>
+resource "aws_instance" "student-<%= i %>-node-1" {
+    ami                         = "${var.amis.amzn}"
+    availability_zone           = "${var.az}"
+    instance_type               = "${var.type.node_amzn}"
+    key_name                    = "${var.key_name}"
+    subnet_id                   = "${aws_subnet.nodes.id}"
+    vpc_security_group_ids      = ["${aws_security_group.nodes.id}"]
+    associate_public_ip_address = true
+
+    tags {
+        "Class" = "${var.class}"
+        "Student" = "<%= i %>"
+        "Name" = "student <%= i %> node-1"
+        "TTL" = "${var.ttl}"
+    }
+}
+<% end %>
