@@ -63,11 +63,11 @@ module ChefHelpers # Helper Module for general purposes
     when 'us-east-1'
       case type
       when 'amzn'
-        'ami-1ecae776'
+        'ami-60b6c60a'
       when 'centos'
         'ami-c2a818aa'
       when 'windows'
-        'ami-f70cdd9c'
+        'ami-ae1a4cc4'
       when 'marketplace'
         'ami-6b305b0e'
       end
@@ -79,7 +79,7 @@ module ChefHelpers # Helper Module for general purposes
       when 'centos'
         'ami-57cfc412'
       when 'windows'
-        'ami-c751a283'
+        'ami-42f48122'
       when 'marketplace'
         'ami-f38346b7'
       end
@@ -87,7 +87,7 @@ module ChefHelpers # Helper Module for general purposes
     when 'us-west-2'
       case type
       when 'amzn'
-        'ami-e7527ed7'
+        'ami-f0091d91'
       when 'centos'
         'ami-81d092b1'
       when 'windows'
