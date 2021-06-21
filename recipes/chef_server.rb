@@ -1,4 +1,4 @@
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Recipe:: chef_server
 
 chef_server = node['chef_classroom']['chef_server']

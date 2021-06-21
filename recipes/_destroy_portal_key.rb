@@ -1,4 +1,4 @@
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Recipe:: _destroy_portal_key
 
 require 'chef/provisioning/aws_driver'
