@@ -1,4 +1,4 @@
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Recipe:: destroy_nodes
 
 require 'chef/provisioning/aws_driver'

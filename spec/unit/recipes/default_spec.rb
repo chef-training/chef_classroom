@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Spec:: default
 #
-# Copyright (c) 2015 The Authors, All Rights Reserved.
+# Copyright:: (c) 2015 The Authors, All Rights Reserved.
 
 require 'spec_helper'
 

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Resource:: lookup
 #
 # Author:: George Miranda (<gmiranda@chef.io>)
@@ -28,9 +28,8 @@
 actions :lookup
 default_action :lookup
 
-attribute :name,      :kind_of => String, :name_attribute => true
-attribute :tags,      :kind_of => Array
-attribute :platform,  :kind_of => String
-attribute :guac_user, :kind_of => String
-attribute :guac_pass, :kind_of => String
-attribute :guac_key,  :kind_of => String
+attribute :tags,      kind_of: Array
+attribute :platform,  kind_of: String
+attribute :guac_user, kind_of: String
+attribute :guac_pass, kind_of: String
+attribute :guac_key,  kind_of: String

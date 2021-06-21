@@ -1,4 +1,4 @@
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Recipe:: _setup_security_groups
 
 require 'chef/provisioning/aws_driver'
@@ -24,7 +24,7 @@ end
 aws_security_group "training-#{class_name}-chef_server" do
   action :create
   ignore_failure true
-  inbound_rules class_source_addr         => [80, 443],
+  inbound_rules class_source_addr => [80, 443],
                 "training-#{class_name}-nodes"  => [443],
                 node['ec2']['local_ipv4'] => [22]
 end

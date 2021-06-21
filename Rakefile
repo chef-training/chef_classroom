@@ -4,7 +4,7 @@ require 'foodcritic'
 require 'kitchen'
 require 'net/http'
 
-PORTAL_IP = ""
+PORTAL_IP = ''
 
 def run_command(command)
   if File.exist?('Gemfile.lock')
@@ -14,13 +14,13 @@ def run_command(command)
   end
 end
 
-task :destroy_all => [:destroy_machine] do
+task destroy_all: [:destroy_machine] do
   run_command('rm -rf Gemfile.lock && rm -rf Berksfile.lock && rm -rf cookbooks/')
 end
 
 namespace :deploy do
-  desc "Deploy Portal"
-  task :portal => [:berks_vendor] do
+  desc 'Deploy Portal'
+  task portal: [:berks_vendor] do
     run_command('chef-client -z -r "role[class],recipe[chef_classroom::deploy_portal]"')
   end
 end
@@ -32,64 +32,63 @@ def portal_get(action)
 end
 
 namespace :portal do
-  desc "Refresh Portal"
+  desc 'Refresh Portal'
   task :refresh do
     puts 'Refreshing Nodes'
     portal_get('refresh_portal')
   end
 
-  desc "Deploy Workstations"
+  desc 'Deploy Workstations'
   task :deploy_workstations do
     puts 'Deploy Workstations'
     portal_get('deploy_workstations')
   end
 
-  desc "Deploy Chef Server"
+  desc 'Deploy Chef Server'
   task :deploy_chef_server do
     puts 'Deploy Additional Nodes'
     portal_get('deploy_chef_server')
   end
 
-  desc "Deploy First Nodes"
+  desc 'Deploy First Nodes'
   task :deploy_first_nodes do
     puts 'Deploy First Nodes'
     portal_get('deploy_first_nodes')
   end
 
-  desc "Deploy Additional Nodes"
+  desc 'Deploy Additional Nodes'
   task :deploy_multi_nodes do
     puts 'Deploy Additional Nodes'
     portal_get('deploy_multi_nodes')
   end
 
-  desc "Destroy Student Workstations"
+  desc 'Destroy Student Workstations'
   task :destroy_workstations do
-    puts "Destroy Student Workstations"
+    puts 'Destroy Student Workstations'
     portal_get('destroy_workstations')
   end
 
-  desc "Destroy Entire Lab"
+  desc 'Destroy Entire Lab'
   task :destroy_lab do
-    puts "Destroy All Nodes, Workstations, and Chef Server"
+    puts 'Destroy All Nodes, Workstations, and Chef Server'
     portal_get('destroy_lab')
   end
 
-  desc "Destroy Chef Server"
+  desc 'Destroy Chef Server'
   task :destroy_chef_server do
-    puts "Destroy Chef Server"
+    puts 'Destroy Chef Server'
     portal_get('destroy_server')
   end
-
 end
 
 namespace :destroy do
-  desc "Destroy Portal"
+  desc 'Destroy Portal'
   task :portal do
     run_command('chef-client -z -r "role[class],recipe[chef_classroom::destroy_portal]"')
   end
 end
 
-desc "Vendor cookbooks"
+desc 'Vendor cookbooks'
 task :berks_vendor do
   run_command('rm -rf Berksfile.lock && rm -rf cookbooks/ && berks vendor cookbooks')
 end
@@ -103,7 +102,7 @@ namespace :style do
   FoodCritic::Rake::LintTask.new(:chef) do |t|
     t.options = {
       fail_tags: ['any'],
-      tags: ['~FC005']
+      tags: ['~FC005'],
     }
   end
 end

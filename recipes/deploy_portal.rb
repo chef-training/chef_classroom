@@ -1,4 +1,4 @@
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Recipe:: deploy_portal
 
 require 'chef/provisioning/aws_driver'
@@ -22,7 +22,7 @@ machine "#{class_name}-portal" do
   converge true
 end
 
-machine_file "/root/chef_classroom/roles/class.json" do
+machine_file '/root/chef_classroom/roles/class.json' do
   machine "#{class_name}-portal"
   local_path node['chef_classroom']['role_json']
   action :upload
