@@ -1,4 +1,4 @@
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Recipe:: destroy_lab
 
 include_recipe 'chef_portal::_refresh_iam_creds'

@@ -1,4 +1,4 @@
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Recipe:: deploy_chef_server
 
 require 'chef/provisioning/aws_driver'

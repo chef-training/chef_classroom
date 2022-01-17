@@ -1,4 +1,4 @@
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Recipe:: _destroy_security_groups
 
 require 'chef/provisioning/aws_driver'

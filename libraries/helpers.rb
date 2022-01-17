@@ -1,8 +1,7 @@
-# Cookbook Name:: chef_classroom
+# Cookbook:: chef_classroom
 # Library:: helper
 
 module ChefHelpers # Helper Module for general purposes
-
   def class_name
     node['chef_classroom']['class_name']
   end
@@ -95,79 +94,79 @@ module ChefHelpers # Helper Module for general purposes
       when 'marketplace'
         'ami-711e0241'
       end
-    #
-    # when 'eu-west-1'
-    #   case type
-    #   when 'amzn'
-    #     'ami-a1b2c3d4'
-    #   when 'centos'
-    #     'ami-b2c3d4e5'
-    #   when 'windows'
-    #     'ami-c3d4e5f6'
-    #   when 'marketplace'
-    #     'ami-d4e5f6g7'
-    #   end
-    #
-    # when 'eu-central-1'
-    #   case type
-    #   when 'amzn'
-    #     'ami-a1b2c3d4'
-    #   when 'centos'
-    #     'ami-b2c3d4e5'
-    #   when 'windows'
-    #     'ami-c3d4e5f6'
-    #   when 'marketplace'
-    #     'ami-d4e5f6g7'
-    #   end
-    #
-    # when 'ap-southeast-1'
-    #   case type
-    #   when 'amzn'
-    #     'ami-a1b2c3d4'
-    #   when 'centos'
-    #     'ami-b2c3d4e5'
-    #   when 'windows'
-    #     'ami-c3d4e5f6'
-    #   when 'marketplace'
-    #     'ami-d4e5f6g7'
-    #   end
-    #
-    # when 'ap-southeast-2'
-    #   case type
-    #   when 'amzn'
-    #     'ami-a1b2c3d4'
-    #   when 'centos'
-    #     'ami-b2c3d4e5'
-    #   when 'windows'
-    #     'ami-c3d4e5f6'
-    #   when 'marketplace'
-    #     'ami-d4e5f6g7'
-    #   end
-    #
-    # when 'ap-northeast-1'
-    #   case type
-    #   when 'amzn'
-    #     'ami-a1b2c3d4'
-    #   when 'centos'
-    #     'ami-b2c3d4e5'
-    #   when 'windows'
-    #     'ami-c3d4e5f6'
-    #   when 'marketplace'
-    #     'ami-d4e5f6g7'
-    #   end
-    #
-    # when 'sa-east-1'
-    #   case type
-    #   when 'amzn'
-    #     'ami-a1b2c3d4'
-    #   when 'centos'
-    #     'ami-b2c3d4e5'
-    #   when 'windows'
-    #     'ami-c3d4e5f6'
-    #   when 'marketplace'
-    #     'ami-d4e5f6g7'
-    #   end
-    #
+      #
+      # when 'eu-west-1'
+      #   case type
+      #   when 'amzn'
+      #     'ami-a1b2c3d4'
+      #   when 'centos'
+      #     'ami-b2c3d4e5'
+      #   when 'windows'
+      #     'ami-c3d4e5f6'
+      #   when 'marketplace'
+      #     'ami-d4e5f6g7'
+      #   end
+      #
+      # when 'eu-central-1'
+      #   case type
+      #   when 'amzn'
+      #     'ami-a1b2c3d4'
+      #   when 'centos'
+      #     'ami-b2c3d4e5'
+      #   when 'windows'
+      #     'ami-c3d4e5f6'
+      #   when 'marketplace'
+      #     'ami-d4e5f6g7'
+      #   end
+      #
+      # when 'ap-southeast-1'
+      #   case type
+      #   when 'amzn'
+      #     'ami-a1b2c3d4'
+      #   when 'centos'
+      #     'ami-b2c3d4e5'
+      #   when 'windows'
+      #     'ami-c3d4e5f6'
+      #   when 'marketplace'
+      #     'ami-d4e5f6g7'
+      #   end
+      #
+      # when 'ap-southeast-2'
+      #   case type
+      #   when 'amzn'
+      #     'ami-a1b2c3d4'
+      #   when 'centos'
+      #     'ami-b2c3d4e5'
+      #   when 'windows'
+      #     'ami-c3d4e5f6'
+      #   when 'marketplace'
+      #     'ami-d4e5f6g7'
+      #   end
+      #
+      # when 'ap-northeast-1'
+      #   case type
+      #   when 'amzn'
+      #     'ami-a1b2c3d4'
+      #   when 'centos'
+      #     'ami-b2c3d4e5'
+      #   when 'windows'
+      #     'ami-c3d4e5f6'
+      #   when 'marketplace'
+      #     'ami-d4e5f6g7'
+      #   end
+      #
+      # when 'sa-east-1'
+      #   case type
+      #   when 'amzn'
+      #     'ami-a1b2c3d4'
+      #   when 'centos'
+      #     'ami-b2c3d4e5'
+      #   when 'windows'
+      #     'ami-c3d4e5f6'
+      #   when 'marketplace'
+      #     'ami-d4e5f6g7'
+      #   end
+      #
     end
   end
 
@@ -186,24 +185,24 @@ module ChefHelpers # Helper Module for general purposes
 
   def create_machine_options(region, type, size, ssh_key, group)
     options = {
-      :region => region,
-      :ssh_username => lookup_ami_user(type),
-      :convergence_options => {
-        :ssl_verify_mode => :verify_none,
-        :chef_version => node['chef_classroom']['chef_version']
+      region: region,
+      ssh_username: lookup_ami_user(type),
+      convergence_options: {
+        ssl_verify_mode: :verify_none,
+        chef_version: node['chef_classroom']['chef_version'],
       },
-      :bootstrap_options => {
-        :instance_type => size,
-        :image_id => lookup_region_ami(region, type),
-        :key_name => ssh_key,
-        :security_group_ids => "training-#{class_name}-#{group}"
-      }
+      bootstrap_options: {
+        instance_type: size,
+        image_id: lookup_region_ami(region, type),
+        key_name: ssh_key,
+        security_group_ids: "training-#{class_name}-#{group}",
+      },
     }
     if type == 'windows'
       options[:is_windows] = true
     end
     if group == 'portal'
-      options[:bootstrap_options][:iam_instance_profile] = { :arn => node['chef_classroom']['iam_instance_profile'] }
+      options[:bootstrap_options][:iam_instance_profile] = { arn: node['chef_classroom']['iam_instance_profile'] }
     end
     unless group == 'portal'
       options[:use_private_ip_for_ssh] = true
@@ -212,13 +211,12 @@ module ChefHelpers # Helper Module for general purposes
   end
 
   def validate_data_bag_item(item)
-    Chef::DataBagItem.load('class_machines', item)
+    data_bag_item('class_machines', item)
   rescue Net::HTTPServerException => error
     nil if error.response.code == '404'
   end
 
   def guacamole_user_map
-
     usermap = {}
     1.upto(count).each do |i|
       workstation = search(
@@ -231,7 +229,7 @@ module ChefHelpers # Helper Module for general purposes
       usermap[i] = {
         'name' => "#{student}-#{i}",
         'password' => 'chef',
-        'machines' => {}
+        'machines' => {},
       }
       # only populate the machines hash with nodes that already exist
       usermap[i]['machines']['workstation'] = workstation unless workstation.nil?
@@ -247,5 +245,5 @@ module ChefHelpers # Helper Module for general purposes
   end
 end
 
-Chef::Recipe.send(:include, ChefHelpers)
+Chef::DSL::Recipe.send(:include, ChefHelpers)
 Chef::Resource.send(:include, ChefHelpers)
